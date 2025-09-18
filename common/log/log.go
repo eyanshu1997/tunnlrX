@@ -44,6 +44,12 @@ var logLevelNames = map[logLevel]string{
 	INFO:  "INFO",
 	DEBUG: "DEBUG",
 }
+var logLevelValues = map[string]logLevel{
+	"panic": PANIC,
+	"error": ERROR,
+	"info":  INFO,
+	"debug": DEBUG,
+}
 
 type CustomLogger struct {
 	*log.Logger
@@ -52,8 +58,13 @@ type CustomLogger struct {
 	includeStdio bool
 }
 
-func InitLogger(infoLevel logLevel, logFilePath string, includeStdio bool) (*CustomLogger, error) {
-
+func InitLogger(logLevelStr string, logFilePath string, includeStdio bool) (*CustomLogger, error) {
+	var logLevel logLevel
+	if lvl, ok := logLevelValues[logLevelStr]; ok {
+		logLevel = lvl
+	} else {
+		return nil, fmt.Errorf("invalid log level: %s", logLevelStr)
+	}
 	// Create log directory if it doesn't exist
 	logDir := filepath.Dir(logFilePath)
 	if _, err := os.Stat(logDir); os.IsNotExist(err) {
@@ -73,7 +84,7 @@ func InitLogger(infoLevel logLevel, logFilePath string, includeStdio bool) (*Cus
 
 	return &CustomLogger{
 		Logger:       log.New(multiWriter, "", 0), // Disable default flags
-		level:        infoLevel,
+		level:        logLevel,
 		logFilePath:  logFilePath,
 		includeStdio: includeStdio,
 	}, nil

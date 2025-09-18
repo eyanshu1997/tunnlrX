@@ -9,9 +9,9 @@ var (
 	Log *logger.CustomLogger
 )
 
-func InitServiceUtils() {
+func InitServiceUtils(serviceConfig *ServiceConfig) {
 	var err error
-	Log, err = logger.InitLogger(logger.INFO, "service.log", true)
+	Log, err = logger.InitLogger(serviceConfig.Log.Level, serviceConfig.Log.FilePath, serviceConfig.Log.IncludeStdio)
 	if err != nil {
 		panic("Failed to initialize logger: " + err.Error())
 	}
