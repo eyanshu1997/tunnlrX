@@ -2,7 +2,7 @@
 
 PROTO_SRC := common/proto/tunnel.proto
 
-PROTOC_GEN_GO := protoc --go_out=paths=source_relative:common/proto --go-grpc_out=paths=source_relative:common/proto
+PROTOC_GEN_GO := protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:.
 
 .PHONY: all proto server client clean
 

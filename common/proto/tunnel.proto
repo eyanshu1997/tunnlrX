@@ -25,9 +25,17 @@ message ListTunnelsResponse {
   repeated Tunnel tunnels = 1;
 }
 
+enum TunnelState {
+  TunnelStateUnknown = 0;
+  TunnelStateUp = 1;
+  TunnelStateDown = 2;
+  TunnelStateInProgress = 3;
+}
+
 message Tunnel {
   string id = 1;
   string name = 2;
   int32 port = 3;
   string domain = 4;
+  TunnelState tunnelState = 5;
 }
