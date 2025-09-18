@@ -1,0 +1,19 @@
+name: Project Automation
+
+on:
+  issues:
+    types: [opened, edited, closed, reopened]
+  pull_request:
+    types: [opened, edited, closed, reopened, ready_for_review, review_requested]
+
+jobs:
+  sync-project:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: GitHub Project Automation
+        uses: actions/add-to-project@v0.4.0
+        with:
+          project-url: https://github.com/orgs/<your-org>/projects/<project-number>
+          github-token: ${{ secrets.GITHUB_TOKEN }}

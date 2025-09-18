@@ -1,0 +1,41 @@
+name: TunnlrX Roadmap
+description: >-
+  Project board for managing TunnlrX development.
+  Tracks tasks from Backlog → In Progress → Review → Done.
+version: 1
+
+# Views = Kanban columns
+views:
+  - name: Backlog
+    filter: "status:backlog"
+    layout: board
+    fields: [title, labels, assignees]
+
+  - name: In Progress
+    filter: "status:in-progress"
+    layout: board
+    fields: [title, labels, assignees, linkedPullRequests]
+
+  - name: Review
+    filter: "status:review"
+    layout: board
+    fields: [title, labels, assignees, linkedPullRequests]
+
+  - name: Done
+    filter: "status:done"
+    layout: board
+    fields: [title, closedAt, linkedPullRequests]
+
+# Status field mapping for automation
+fields:
+  - name: Status
+    dataType: single_select
+    options:
+      - name: Backlog
+        color: '#DDDDDD'
+      - name: In Progress
+        color: '#FBCA04'
+      - name: Review
+        color: '#1D76DB'
+      - name: Done
+        color: '#0E8A16'

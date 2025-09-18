@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package tunnel;
+
+option go_package = "github.com/eyanshu1997/tunnlrX/common/proto;proto";
+
+service TunnelService {
+  rpc CreateTunnel (CreateTunnelRequest) returns (CreateTunnelResponse);
+  rpc ListTunnels (ListTunnelsRequest) returns (ListTunnelsResponse);
+}
+
+message CreateTunnelRequest {
+  string name = 1;
+  int32 port = 2;
+}
+
+message CreateTunnelResponse {
+  string id = 1;
+  string domain = 2;
+}
+
+message ListTunnelsRequest {}
+
+message ListTunnelsResponse {
+  repeated Tunnel tunnels = 1;
+}
+
+message Tunnel {
+  string id = 1;
+  string name = 2;
+  int32 port = 3;
+  string domain = 4;
+}

@@ -1,0 +1,5 @@
+build/*
+docs/*
+common/proto/common/proto/tunnel_grpc.pb.go
+common/proto/common/proto/tunnel.pb.go
+*.pb.go
