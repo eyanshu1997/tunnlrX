@@ -1,6 +1,8 @@
 package serviceutils
 
-import logger "github.com/eyanshu1997/tunnlrx/common/log"
+import (
+	logger "github.com/eyanshu1997/tunnlrx/common/log"
+)
 
 // This file contains utility functions for services like reading config files
 // initializing common services such as logger
@@ -15,4 +17,5 @@ func InitServiceUtils(serviceConfig *ServiceConfig) {
 	if err != nil {
 		panic("Failed to initialize logger: " + err.Error())
 	}
+
 }
