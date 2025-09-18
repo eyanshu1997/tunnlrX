@@ -15,5 +15,5 @@ jobs:
       - name: GitHub Project Automation
         uses: actions/add-to-project@v0.4.0
         with:
-          project-url: https://github.com/orgs/<your-org>/projects/<project-number>
+          project-url: https://github.com/users/eyanshu1997/projects/1
           github-token: ${{ secrets.GITHUB_TOKEN }}
