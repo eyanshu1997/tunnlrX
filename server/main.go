@@ -2,13 +2,12 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"net"
 	"net/http"
 
 	"github.com/eyanshu1997/tunnlrx/common/serviceutils"
 	"github.com/eyanshu1997/tunnlrx/server/config"
 	"github.com/eyanshu1997/tunnlrx/server/grpcserver"
+	"github.com/eyanshu1997/tunnlrx/server/httpserver"
 )
 
 var configPath string
@@ -19,26 +18,22 @@ func init() {
 }
 
 func InitServer(config *config.ServerConfig) {
-	httpMux := http.NewServeMux()
-	grpcServer := grpcserver.GetGrpcServer()
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", config.GrpcPort))
-	if err != nil {
-		serviceutils.Log.Fatalf("Failed to listen on port %d: %v", config.GrpcPort, err)
-	}
+
 	go func() {
-		serviceutils.Log.Info("Starting HTTP server on port %d", config.ApiPort)
+		serviceutils.Log.Info("Starting GRPC server on port %d", config.GrpcPort)
+		grpcServer, lis, err := grpcserver.GetGrpcServerAndListener(uint32(config.GrpcPort))
+		if err != nil {
+			serviceutils.Log.Fatalf("Failed to start gRPC server: %v", err)
+		}
 		if err := grpcServer.Serve(lis); err != nil {
 			serviceutils.Log.Fatalf("Failed to serve gRPC server: %v", err)
 		}
 	}()
 
-	// Simple HTTP server for health checks
-	httpMux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("OK"))
-	})
 	go func() {
 		serviceutils.Log.Info("Starting HTTP server on port %d", config.ApiPort)
-		if err := http.ListenAndServe(fmt.Sprintf(":%d", config.ApiPort), httpMux); err != nil {
+		httpServer := httpserver.NewHttpServer(config.ApiPort)
+		if err := httpServer.Start(); err != nil && err != http.ErrServerClosed {
 			serviceutils.Log.Fatalf("Failed to start HTTP server: %v", err)
 		}
 	}()
@@ -54,8 +49,10 @@ func main() {
 		panic("Failed to load config: " + err.Error())
 	}
 
-	serviceutils.InitServiceUtils(config.ServiceConfig)
+	serviceutils.InitServiceUtils(config.ServiceConfig, "TunnlrxServer")
 
 	InitServer(config)
 	serviceutils.Log.Info("Server started successfully")
+	// listen for interrupt signal to gracefully shutdown the server
+	select {}
 }

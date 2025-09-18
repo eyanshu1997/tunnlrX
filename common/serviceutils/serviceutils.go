@@ -11,11 +11,12 @@ var (
 	Log *logger.CustomLogger
 )
 
-func InitServiceUtils(serviceConfig *ServiceConfig) {
+func InitServiceUtils(serviceConfig *ServiceConfig, serviceName string) {
 	var err error
-	Log, err = logger.InitLogger(serviceConfig.Log.Level, serviceConfig.Log.FilePath, serviceConfig.Log.IncludeStdio)
+	Log, err = logger.InitLogger(serviceConfig.Log.Level, serviceConfig.Log.FilePath+serviceName+".log", serviceConfig.Log.IncludeStdio)
 	if err != nil {
 		panic("Failed to initialize logger: " + err.Error())
 	}
+	Log.Debug("Config %+v", serviceConfig)
 
 }

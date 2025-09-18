@@ -6,6 +6,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 
 	"github.com/eyanshu1997/tunnlrx/common/serviceutils"
@@ -15,6 +16,23 @@ type ServerConfig struct {
 	ApiPort  int `json:"port"`
 	GrpcPort int `json:"grpc_port"`
 	*serviceutils.ServiceConfig
+}
+
+func (s *ServerConfig) Validate() error {
+	if s.ApiPort <= 0 || s.ApiPort > 65535 {
+		return fmt.Errorf("Invalid API port")
+	}
+	if s.GrpcPort <= 0 || s.GrpcPort > 65535 {
+		return fmt.Errorf("Invalid gRPC port")
+	}
+	if s.ServiceConfig == nil {
+		return fmt.Errorf("ServiceConfig cannot be nil")
+	}
+	return nil
+}
+
+func (s *ServerConfig) String() string {
+	return fmt.Sprintf("ServerConfig{ApiPort: %d, GrpcPort: %d, ServiceConfig: %v}", s.ApiPort, s.GrpcPort, s.ServiceConfig)
 }
 
 func LoadConfig(filePath string) (*ServerConfig, error) {
@@ -28,6 +46,10 @@ func LoadConfig(filePath string) (*ServerConfig, error) {
 	decoder := json.NewDecoder(file)
 	config := &ServerConfig{}
 	err = decoder.Decode(config)
+	if err != nil {
+		return nil, err
+	}
+	err = config.Validate()
 	if err != nil {
 		return nil, err
 	}
