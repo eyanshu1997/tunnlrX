@@ -19,11 +19,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
       - name: Add Go bin to PATH
         run: echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
-      - name: Generate Protobuf
-        run: make proto
-      - name: Build Server
-        run: make server
-      - name: Build Client
-        run: make client
+      - name: Build
+        run: make all
       - name: Test
         run: go test ./...

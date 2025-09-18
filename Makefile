@@ -4,20 +4,32 @@ PROTO_SRC := common/proto/tunnel.proto
 
 PROTOC_GEN_GO := protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:.
 
-.PHONY: all proto server client clean
+.PHONY: all proto server client clean deps tidy
 
-all: proto server client
+all: tidy proto server client
 
-proto:
+tidy:
+	cd common && go mod tidy
+	cd server && go mod tidy
+	cd client && go mod tidy
+
+deps: tidy
+	@which go > /dev/null || (echo "Error: Go (golang) is not installed or not in PATH." && exit 1)
+	@which protoc > /dev/null || (echo "Error: protoc is not installed or not in PATH." && exit 1)
+	@which protoc-gen-go > /dev/null || go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+	@which protoc-gen-go-grpc > /dev/null || go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+proto: deps
 	$(PROTOC_GEN_GO) $(PROTO_SRC)
 
-server:
+server: tidy
 	cd server && go build -o ../build/tunnlrx-server
 
-client:
+client: tidy
 	cd client && go build -o ../build/tunnlrx-client
 
 clean:
+	tidy
 	rm -f common/proto/*.pb.go
 	rm -f build/tunnlrx-server build/tunnlrx-client
 	cd server && go clean
