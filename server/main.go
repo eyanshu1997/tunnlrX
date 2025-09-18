@@ -26,6 +26,7 @@ func InitServer(config *config.ServerConfig) {
 		serviceutils.Log.Fatalf("Failed to listen on port %d: %v", config.GrpcPort, err)
 	}
 	go func() {
+		serviceutils.Log.Info("Starting HTTP server on port %d", config.ApiPort)
 		if err := grpcServer.Serve(lis); err != nil {
 			serviceutils.Log.Fatalf("Failed to serve gRPC server: %v", err)
 		}
@@ -35,10 +36,12 @@ func InitServer(config *config.ServerConfig) {
 	httpMux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("OK"))
 	})
-	serviceutils.Log.Info("Starting HTTP server on port %d", config.ApiPort)
-	if err := http.ListenAndServe(fmt.Sprintf(":%d", config.ApiPort), httpMux); err != nil {
-		serviceutils.Log.Fatalf("Failed to start HTTP server: %v", err)
-	}
+	go func() {
+		serviceutils.Log.Info("Starting HTTP server on port %d", config.ApiPort)
+		if err := http.ListenAndServe(fmt.Sprintf(":%d", config.ApiPort), httpMux); err != nil {
+			serviceutils.Log.Fatalf("Failed to start HTTP server: %v", err)
+		}
+	}()
 }
 
 func main() {
@@ -52,6 +55,7 @@ func main() {
 	}
 
 	serviceutils.InitServiceUtils(config.ServiceConfig)
-	serviceutils.Log.Info("🚀 TunnlrX server starting on ")
+
 	InitServer(config)
+	serviceutils.Log.Info("Server started successfully")
 }

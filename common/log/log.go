@@ -81,13 +81,14 @@ func InitLogger(logLevelStr string, logFilePath string, includeStdio bool) (*Cus
 	} else {
 		multiWriter = io.MultiWriter(logFile)
 	}
-
-	return &CustomLogger{
+	logger := CustomLogger{
 		Logger:       log.New(multiWriter, "", 0), // Disable default flags
 		level:        logLevel,
 		logFilePath:  logFilePath,
 		includeStdio: includeStdio,
-	}, nil
+	}
+	logger.Info("Logger initialized with level %s, log file: %s, include stdio: %v", logLevelStr, logFilePath, includeStdio)
+	return &logger, nil
 }
 
 func (l *CustomLogger) logf(level logLevel, format string, v ...interface{}) {

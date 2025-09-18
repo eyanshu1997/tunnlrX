@@ -25,6 +25,12 @@ server:
 client: 
 	cd client && go mod tidy && go build -o ../build/tunnlrx-client
 
+qserver: 
+	cd server && go build -o ../build/tunnlrx-server
+
+qclient: 
+	cd client  && go build -o ../build/tunnlrx-client
+
 clean:
 	rm -f common/proto/*.pb.go
 	rm -f build/tunnlrx-server build/tunnlrx-client
