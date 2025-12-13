@@ -251,7 +251,7 @@ func (x *ListClientsResponse) GetClients() []*Client {
 
 type Client struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Port          int32                  `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
 	Ip            string                 `protobuf:"bytes,4,opt,name=ip,proto3" json:"ip,omitempty"`
@@ -291,11 +291,11 @@ func (*Client) Descriptor() ([]byte, []int) {
 	return file_common_proto_config_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *Client) GetId() string {
+func (x *Client) GetId() uint32 {
 	if x != nil {
 		return x.Id
 	}
-	return ""
+	return 0
 }
 
 func (x *Client) GetName() string {
@@ -347,7 +347,7 @@ const file_common_proto_config_proto_rawDesc = "" +
 	"\x13ListClientsResponse\x12'\n" +
 	"\aClients\x18\x01 \x03(\v2\r.proto.ClientR\aClients\"\x9e\x01\n" +
 	"\x06Client\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
 	"\x04port\x18\x03 \x01(\x05R\x04port\x12\x0e\n" +
 	"\x02ip\x18\x04 \x01(\tR\x02ip\x12\x16\n" +

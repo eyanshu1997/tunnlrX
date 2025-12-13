@@ -32,6 +32,9 @@ func main() {
 		fmt.Printf("Failed to initialize client: %v\n", err)
 		return
 	}
+	defer func() {
+		_ = client.Close()
+	}()
 	serviceutils.Log.Info("Client initialized successfully:", client)
 	ctx := serviceutils.GetContextWithMetadata()
 	// client will register itself and list clients from server every 30 seconds here

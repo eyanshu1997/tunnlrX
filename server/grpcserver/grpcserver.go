@@ -10,10 +10,10 @@ import (
 	"google.golang.org/grpc"
 )
 
-type ClientStatus int
+type ClientState int
 
 const (
-	Unknown ClientStatus = iota
+	Unknown ClientState = iota
 	Inactive
 	Active
 	Inprogress
@@ -25,7 +25,7 @@ type ClientDetails struct {
 	Port   int
 	Ip     string
 	Domain string
-	Status ClientStatus
+	State  ClientState
 }
 
 type TunnelXServer struct {
@@ -54,7 +54,7 @@ func (s *TunnelXServer) RegisterClient(ctx context.Context, req *proto.RegisterC
 		Id:     tempid,
 		Name:   req.GetName(),
 		Domain: GenerateDomainName(tempid),
-		Status: Inprogress,
+		State:  Inprogress,
 	}
 
 	s.TunnelDetails[newClient.Id] = newClient
@@ -68,8 +68,18 @@ func (s *TunnelXServer) RegisterClient(ctx context.Context, req *proto.RegisterC
 
 func (s *TunnelXServer) ListClients(ctx context.Context, req *proto.ListClientsRequest) (*proto.ListClientsResponse, error) {
 	serviceutils.Log.Info("ListClients called with request: %v", req)
-	// Implement the logic to list clients
-	return &proto.ListClientsResponse{}, nil
+	var clients []*proto.Client
+	for _, client := range s.TunnelDetails {
+		clients = append(clients, &proto.Client{
+			Id:          client.Id,
+			Name:        client.Name,
+			Domain:      client.Domain,
+			ClientState: proto.ClientState(client.State),
+		})
+	}
+	return &proto.ListClientsResponse{
+		Clients: clients,
+	}, nil
 }
 
 func GetGrpcServerAndListener(port uint32) (*grpc.Server, net.Listener, error) {

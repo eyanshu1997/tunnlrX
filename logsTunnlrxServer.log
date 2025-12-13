@@ -1,38 +1,6 @@
-2025-12-13 17:41:27 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
-2025-12-13 17:41:27 [INFO] main.go:55 - Server started successfully
-2025-12-13 17:41:27 [INFO] main.go:23 - Starting GRPC server on port 9090
-2025-12-13 17:41:27 [INFO] main.go:34 - Starting HTTP server on port 8080
-2025-12-13 17:45:49 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
-2025-12-13 17:45:49 [INFO] main.go:55 - Server started successfully
-2025-12-13 17:45:49 [INFO] main.go:34 - Starting HTTP server on port 8080
-2025-12-13 17:45:49 [INFO] main.go:23 - Starting GRPC server on port 9090
-2025-12-13 17:50:35 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
-2025-12-13 17:50:35 [INFO] main.go:55 - Server started successfully
-2025-12-13 17:50:35 [INFO] main.go:23 - Starting GRPC server on port 9090
-2025-12-13 17:50:35 [INFO] main.go:34 - Starting HTTP server on port 8080
-2025-12-13 17:50:51 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
-2025-12-13 17:50:51 [INFO] grpcclient.go:27 - Connected to gRPC server at localhost:9090
-2025-12-13 17:54:16 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
-2025-12-13 17:54:16 [INFO] main.go:55 - Server started successfully
-2025-12-13 17:54:16 [INFO] main.go:34 - Starting HTTP server on port 8080
-2025-12-13 17:54:16 [INFO] main.go:23 - Starting GRPC server on port 9090
-2025-12-13 17:54:31 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
-2025-12-13 17:54:31 [INFO] grpcclient.go:27 - Connected to gRPC server at localhost:9090
-2025-12-13 17:55:09 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
-2025-12-13 17:55:09 [INFO] main.go:55 - Server started successfully
-2025-12-13 17:55:09 [INFO] main.go:34 - Starting HTTP server on port 8080
-2025-12-13 17:55:09 [INFO] main.go:23 - Starting GRPC server on port 9090
-2025-12-13 17:55:19 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
-2025-12-13 17:55:19 [INFO] grpcclient.go:28 - Connected to gRPC server at localhost:9090
-2025-12-13 17:56:25 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
-2025-12-13 17:56:25 [INFO] main.go:55 - Server started successfully
-2025-12-13 17:56:25 [INFO] main.go:34 - Starting HTTP server on port 8080
-2025-12-13 17:56:25 [INFO] main.go:23 - Starting GRPC server on port 9090
-2025-12-13 17:56:36 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
-2025-12-13 17:56:36 [INFO] grpcclient.go:28 - Connected to gRPC server at localhost:9090
-2025-12-13 17:59:29 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
-2025-12-13 17:59:29 [INFO] main.go:57 - Server started successfully
-2025-12-13 17:59:29 [INFO] main.go:36 - Starting HTTP server on port 8080
-2025-12-13 17:59:29 [INFO] main.go:25 - Starting GRPC server on port 9090
-2025-12-13 17:59:31 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
-2025-12-13 17:59:31 [INFO] grpcclient.go:28 - Connected to gRPC server at localhost:9090
+2025-12-13 18:13:14 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
+2025-12-13 18:13:14 [INFO] grpcclient.go:29 - Connected to gRPC server at localhost:9090
+2025-12-13 18:13:14 [INFO] main.go:38 - Client initialized successfully:%!(EXTRA *grpcclient.grpcClient=&{0xc0001bc008 0xc000125160 SampleClient1})
+2025-12-13 18:13:59 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
+2025-12-13 18:13:59 [INFO] grpcclient.go:29 - Connected to gRPC server at localhost:9090
+2025-12-13 18:13:59 [INFO] main.go:38 - Client initialized successfully:%!(EXTRA *grpcclient.grpcClient=&{0xc000004408 0xc0000391a0 SampleClient1})
