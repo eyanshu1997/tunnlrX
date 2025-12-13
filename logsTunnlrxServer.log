@@ -1,6 +1,0 @@
-2025-12-13 18:13:14 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
-2025-12-13 18:13:14 [INFO] grpcclient.go:29 - Connected to gRPC server at localhost:9090
-2025-12-13 18:13:14 [INFO] main.go:38 - Client initialized successfully:%!(EXTRA *grpcclient.grpcClient=&{0xc0001bc008 0xc000125160 SampleClient1})
-2025-12-13 18:13:59 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
-2025-12-13 18:13:59 [INFO] grpcclient.go:29 - Connected to gRPC server at localhost:9090
-2025-12-13 18:13:59 [INFO] main.go:38 - Client initialized successfully:%!(EXTRA *grpcclient.grpcClient=&{0xc000004408 0xc0000391a0 SampleClient1})
