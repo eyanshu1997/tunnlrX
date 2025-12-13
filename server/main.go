@@ -13,7 +13,7 @@ import (
 var configPath string
 
 func init() {
-	flag.StringVar(&configPath, "config", "config.json", "Path to configuration file")
+	flag.StringVar(&configPath, "config", "configs/tunnlrx-server.json", "Path to configuration file")
 	flag.Parse()
 }
 
