@@ -1,0 +1,7 @@
+Tunnlrx Client Starting...
+2025-12-13 17:59:31 [INFO] log.go:90 - Logger initialized with level info, log file: logsTunnlrxServer.log, include stdio: true
+2025-12-13 17:59:31 [INFO] grpcclient.go:28 - Connected to gRPC server at localhost:9090
+Client initialized successfully: &{0xc000124da0 SampleClient1}
+Failed to list clients: failed to list clients: rpc error: code = Canceled desc = grpc: the client connection is closing
+Failed to list clients: failed to list clients: rpc error: code = Canceled desc = grpc: the client connection is closing
+Failed to list clients: failed to list clients: rpc error: code = Canceled desc = grpc: the client connection is closing

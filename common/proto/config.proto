@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/eyanshu1997/tunnlrX/common/proto;proto";
+
+service ConfigService {
+  rpc RegisterClient (RegisterClientRequest) returns (RegisterClientResponse);
+  rpc ListClients (ListClientsRequest) returns (ListClientsResponse);
+}
+
+message RegisterClientRequest {
+  string name = 1;
+}
+
+message RegisterClientResponse {
+  uint32 id = 1;
+  string domain = 2;
+}
+
+message ListClientsRequest {}
+
+message ListClientsResponse {
+  repeated Client Clients = 1;
+}
+
+enum ClientState {
+  ClientStateUnknown = 0;
+  ClientStateActive = 1;
+  ClientStateInActive = 2;
+  ClientStateInProgress = 3;
+}
+
+message Client {
+  string id = 1;
+  string name = 2;
+  int32 port = 3;
+  string ip = 4;
+  string domain = 5;
+  ClientState ClientState = 6;
+}

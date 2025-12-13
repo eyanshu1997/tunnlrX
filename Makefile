@@ -1,6 +1,6 @@
 # Project-level Makefile for TunnlrX
 
-PROTO_SRC := common/proto/tunnel.proto
+PROTO_SRC := common/proto/config.proto
 
 PROTOC_GEN_GO := protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:.
 
@@ -36,3 +36,17 @@ clean:
 	rm -f build/tunnlrx-server build/tunnlrx-client
 	cd server && go clean
 	cd client && go clean
+
+
+# we need to run as daemon
+run_server:
+	pkill tunnlrx-server || true
+	nohup ./build/tunnlrx-server -config=configs/tunnlrx-server.json > tunnlrx-server.log 2>&1 &
+
+run_client:
+	pkill tunnlrx-client || true
+	nohup ./build/tunnlrx-client -config=configs/tunnlrx-client.json > tunnlrx-client.log 2>&1 &
+
+stop_all:
+	pkill tunnlrx-server || true
+	pkill tunnlrx-client || true

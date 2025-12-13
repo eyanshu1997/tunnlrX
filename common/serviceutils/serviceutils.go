@@ -1,6 +1,8 @@
 package serviceutils
 
 import (
+	"context"
+
 	logger "github.com/eyanshu1997/tunnlrx/common/log"
 )
 
@@ -19,4 +21,9 @@ func InitServiceUtils(serviceConfig *ServiceConfig, serviceName string) {
 	}
 	Log.Debug("Config %+v", serviceConfig)
 
+}
+
+func GetContextWithMetadata() context.Context {
+	// Add any common metadata to context if needed
+	return context.Background()
 }

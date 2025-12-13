@@ -2,7 +2,9 @@ package main
 
 import (
 	"flag"
+	"log"
 	"net/http"
+	"time"
 
 	"github.com/eyanshu1997/tunnlrx/common/serviceutils"
 	"github.com/eyanshu1997/tunnlrx/server/config"
@@ -54,5 +56,8 @@ func main() {
 	InitServer(config)
 	serviceutils.Log.Info("Server started successfully")
 	// listen for interrupt signal to gracefully shutdown the server
-	select {}
+	for {
+		time.Sleep(30 * time.Second)
+		log.Printf("Server is running... ")
+	}
 }

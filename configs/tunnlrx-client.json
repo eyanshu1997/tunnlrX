@@ -1,0 +1,12 @@
+
+{
+    "host": "localhost",
+    "port": 9090,
+    "name": "SampleClient1",
+    "log": {
+        "level": "info",
+        "file_path": "logs",
+        "include_stdio": true
+    }
+ 
+}
