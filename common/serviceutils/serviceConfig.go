@@ -7,5 +7,6 @@ type LogConfig struct {
 }
 
 type ServiceConfig struct {
-	Log LogConfig `json:"log"`
+	Log         LogConfig `json:"log"`
+	ServiceName string    `json:"service_name"`
 }

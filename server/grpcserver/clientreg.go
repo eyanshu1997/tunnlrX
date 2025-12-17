@@ -2,9 +2,12 @@ package grpcserver
 
 import (
 	"context"
+	"fmt"
+	"net"
 
 	"github.com/eyanshu1997/tunnlrx/common/proto"
 	"github.com/eyanshu1997/tunnlrx/common/serviceutils"
+	"google.golang.org/grpc/peer"
 )
 
 type ClientState uint32
@@ -28,12 +31,38 @@ var tempid uint32 = 0
 
 func (s *TunnelXServer) RegisterClient(ctx context.Context, req *proto.RegisterClientRequest) (*proto.RegisterClientResponse, error) {
 	serviceutils.Log.Info("RegisterClient called with request: %v", req)
-	// TODO get ip and port details from the context metadata
+	var clientIP string
+	var clientPort int
+	if p, ok := peer.FromContext(ctx); ok {
+		// To get the IP and port separately
+		tcpAddr, ok := p.Addr.(*net.TCPAddr)
+		if !ok {
+			err := fmt.Errorf("unable to get the client ip and port")
+			serviceutils.Log.Error("Error: %s", err)
+			return nil, err
+		}
+		clientIP = tcpAddr.IP.String()
+		clientPort = tcpAddr.Port
+		// Use clientIP and clientPort as needed
+		fmt.Printf("Client connected from IP: %s, Port: %d\n", clientIP, clientPort)
 
+	}
+	// check if existing client exists using same port and ip
+	for _, client := range s.ClientDetails {
+		if client.Ip == clientIP && client.Port == clientPort {
+			serviceutils.Log.Info("Client already exists: %v", client)
+			return &proto.RegisterClientResponse{
+				Id: client.Id,
+			}, nil
+		}
+	}
+	// create new client
 	newClient := ClientDetails{
 		Id:    tempid,
 		Name:  req.GetName(),
 		State: ClientStateActive,
+		Ip:    clientIP,
+		Port:  clientPort,
 	}
 
 	s.ClientDetails[newClient.Id] = newClient

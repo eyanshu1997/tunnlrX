@@ -6,6 +6,8 @@
         "level": "info",
         "file_path": "logs",
         "include_stdio": true
-    }
+    },
+    "serviceName": "tunnlrxServer"
+
  
 }

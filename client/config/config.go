@@ -12,10 +12,16 @@ import (
 	"github.com/eyanshu1997/tunnlrx/common/serviceutils"
 )
 
+type TunnelConfig struct {
+	Port   uint32 `json:"port"`
+	Domain string `json:"domain"`
+}
+
 type ClientConfig struct {
-	ServerHost string `json:"host"`
-	ServerPort int    `json:"port"`
-	Name       string `json:"name"`
+	ServerHost   string         `json:"host"`
+	ServerPort   int            `json:"port"`
+	Name         string         `json:"name"`
+	TunnelConfig []TunnelConfig `json:"tunnels"`
 	*serviceutils.ServiceConfig
 }
 

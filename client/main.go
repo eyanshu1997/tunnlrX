@@ -25,7 +25,7 @@ func main() {
 		fmt.Printf("Failed to load client config: %v\n", err)
 		return
 	}
-	serviceutils.InitServiceUtils(clientConfig.ServiceConfig, "TunnlrxServer")
+	serviceutils.InitServiceUtils(clientConfig.ServiceConfig)
 	// Initialize client with the loaded configuration
 	client, err := grpcclient.NewGrpcClient(clientConfig.ServerHost, clientConfig.ServerPort, clientConfig.Name)
 	if err != nil {
@@ -37,12 +37,22 @@ func main() {
 	}()
 	serviceutils.Log.Info("Client initialized successfully:", client)
 	ctx := serviceutils.GetContextWithMetadata()
+
+	// all of this code will be changed to actual implementation
 	// client will register itself and list clients from server every 30 seconds here
 	err = client.RegisterClient(ctx)
 	if err != nil {
 		fmt.Printf("Failed to register client: %v\n", err)
 		return
 	}
+	for _, tunnel := range clientConfig.TunnelConfig {
+		err = client.RegisterTunnel(ctx, int32(tunnel.Port), tunnel.Domain)
+		if err != nil {
+			fmt.Printf("Failed to register tunnel: %v\n", err)
+			return
+		}
+	}
+
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 	for range ticker.C {

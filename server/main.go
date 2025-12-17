@@ -49,7 +49,7 @@ func main() {
 		panic("Failed to load config: " + err.Error())
 	}
 
-	serviceutils.InitServiceUtils(config.ServiceConfig, "TunnlrxServer")
+	serviceutils.InitServiceUtils(config.ServiceConfig)
 
 	InitServer(config)
 	serviceutils.Log.Info("Server started successfully")

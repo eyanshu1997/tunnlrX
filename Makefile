@@ -9,7 +9,6 @@ PROTOC_GEN_GO := protoc --proto_path=$(PROTO_PATH) --go_out=paths=source_relativ
 
 all:  proto server client
 
-
 deps:
 	@which go > /dev/null || (echo "Error: Go (golang) is not installed or not in PATH." && exit 1)
 	@which protoc > /dev/null || (echo "Error: protoc is not installed or not in PATH." && exit 1)
