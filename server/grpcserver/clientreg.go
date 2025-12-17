@@ -44,7 +44,7 @@ func (s *TunnelXServer) RegisterClient(ctx context.Context, req *proto.RegisterC
 		clientIP = tcpAddr.IP.String()
 		clientPort = tcpAddr.Port
 		// Use clientIP and clientPort as needed
-		fmt.Printf("Client connected from IP: %s, Port: %d\n", clientIP, clientPort)
+		serviceutils.Log.Info("Client connected from IP: %s, Port: %d\n", clientIP, clientPort)
 
 	}
 	// check if existing client exists using same port and ip
