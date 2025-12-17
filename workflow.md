@@ -14,11 +14,11 @@
 flowchart LR
     A[Server Node] -->|Configure| Client1
     A[Server Node] -->|Configure| Client2
-    D{Internet} ==> |Req| IngressServer
-    IngressServer ==> |Proxy Req|Node
+    D{Internet} ==> |Req| IngressNode
+    IngressServer ==> |Proxy Req|ClientNode
     E{UI} ==>|rest api|A
     subgraph Client2
-        Node --> Service
+        ClientNode --> Service
     end
     subgraph Client1
         IngressServer
