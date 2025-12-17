@@ -22,6 +22,7 @@ package common
 import (
 	"fmt"
 	"log"
+	"os"
 	"path/filepath"
 	"runtime"
 	"time"
@@ -96,6 +97,11 @@ func (l *CustomLogger) Error(format string, v ...interface{}) {
 
 func (l *CustomLogger) Info(format string, v ...interface{}) {
 	l.logf(INFO, format, v...)
+}
+
+func (l *CustomLogger) Fatalf(format string, v ...interface{}) {
+	l.logf(ERROR, format, v...)
+	os.Exit(1)
 }
 
 func (l *CustomLogger) Debug(format string, v ...interface{}) {
