@@ -17,3 +17,20 @@ enum TunnelState {
   TUNNEL_STATE_IN_ACTIVE = 2;
   TUNNEL_STATE_IN_PROGRESS = 3; 
 }
+
+message Client {
+  uint32 id = 1;
+  string name = 2;
+  int32 port = 3;
+  string ip = 4;
+  ClientState client_state = 5;
+}
+
+message Tunnel {
+  uint32 id = 1;
+  string name = 2;
+  int32 port = 3;
+  string domain = 4;
+  Client client = 5;
+  TunnelState tunnel_state = 6;
+}

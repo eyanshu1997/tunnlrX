@@ -21,7 +21,6 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	ConfigService_RegisterClient_FullMethodName = "/proto.ConfigService/RegisterClient"
 	ConfigService_ListClients_FullMethodName    = "/proto.ConfigService/ListClients"
-	ConfigService_RegisterTunnel_FullMethodName = "/proto.ConfigService/RegisterTunnel"
 	ConfigService_ListTunnels_FullMethodName    = "/proto.ConfigService/ListTunnels"
 )
 
@@ -35,8 +34,6 @@ type ConfigServiceClient interface {
 	RegisterClient(ctx context.Context, in *RegisterClientRequest, opts ...grpc.CallOption) (*RegisterClientResponse, error)
 	// ListClients is used to list all the clients registered to the server
 	ListClients(ctx context.Context, in *ListClientsRequest, opts ...grpc.CallOption) (*ListClientsResponse, error)
-	// RegisterTunnel is used to register a new tunnel to the server
-	RegisterTunnel(ctx context.Context, in *RegisterTunnelRequest, opts ...grpc.CallOption) (*RegisterTunnelResponse, error)
 	// ListTunnels is used to list all the tunnels registered to the server
 	ListTunnels(ctx context.Context, in *ListTunnelsRequest, opts ...grpc.CallOption) (*ListTunnelsResponse, error)
 }
@@ -69,16 +66,6 @@ func (c *configServiceClient) ListClients(ctx context.Context, in *ListClientsRe
 	return out, nil
 }
 
-func (c *configServiceClient) RegisterTunnel(ctx context.Context, in *RegisterTunnelRequest, opts ...grpc.CallOption) (*RegisterTunnelResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(RegisterTunnelResponse)
-	err := c.cc.Invoke(ctx, ConfigService_RegisterTunnel_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *configServiceClient) ListTunnels(ctx context.Context, in *ListTunnelsRequest, opts ...grpc.CallOption) (*ListTunnelsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListTunnelsResponse)
@@ -99,8 +86,6 @@ type ConfigServiceServer interface {
 	RegisterClient(context.Context, *RegisterClientRequest) (*RegisterClientResponse, error)
 	// ListClients is used to list all the clients registered to the server
 	ListClients(context.Context, *ListClientsRequest) (*ListClientsResponse, error)
-	// RegisterTunnel is used to register a new tunnel to the server
-	RegisterTunnel(context.Context, *RegisterTunnelRequest) (*RegisterTunnelResponse, error)
 	// ListTunnels is used to list all the tunnels registered to the server
 	ListTunnels(context.Context, *ListTunnelsRequest) (*ListTunnelsResponse, error)
 	mustEmbedUnimplementedConfigServiceServer()
@@ -118,9 +103,6 @@ func (UnimplementedConfigServiceServer) RegisterClient(context.Context, *Registe
 }
 func (UnimplementedConfigServiceServer) ListClients(context.Context, *ListClientsRequest) (*ListClientsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListClients not implemented")
-}
-func (UnimplementedConfigServiceServer) RegisterTunnel(context.Context, *RegisterTunnelRequest) (*RegisterTunnelResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method RegisterTunnel not implemented")
 }
 func (UnimplementedConfigServiceServer) ListTunnels(context.Context, *ListTunnelsRequest) (*ListTunnelsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListTunnels not implemented")
@@ -182,24 +164,6 @@ func _ConfigService_ListClients_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ConfigService_RegisterTunnel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RegisterTunnelRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ConfigServiceServer).RegisterTunnel(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ConfigService_RegisterTunnel_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConfigServiceServer).RegisterTunnel(ctx, req.(*RegisterTunnelRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _ConfigService_ListTunnels_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListTunnelsRequest)
 	if err := dec(in); err != nil {
@@ -232,10 +196,6 @@ var ConfigService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListClients",
 			Handler:    _ConfigService_ListClients_Handler,
-		},
-		{
-			MethodName: "RegisterTunnel",
-			Handler:    _ConfigService_RegisterTunnel_Handler,
 		},
 		{
 			MethodName: "ListTunnels",

@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package proto;
+
+import "common.proto";
+import "google/api/annotations.proto";
+
+
+option go_package = "github.com/eyanshu1997/tunnlrX/common/proto;proto";
+
+// TunnlrxApiServeice is the main service that is used to configure the server
+service TunnlrxApiServeice{
+    rpc CreateClient(CreateClientRequest) returns (CreateClientResponse){
+        option (google.api.http) = {
+            post: "/api/v1/client/create"
+            body: "*"
+        
+        }
+    };
+    rpc CreateTunnel(CreateTunnelRequest) returns (CreateTunnelResponse){
+        option (google.api.http) = {
+            post: "/api/v1/tunnel/create"
+            body: "*"
+        
+        }
+    };
+
+}
+
+message CreateClientRequest {
+    string group_id = 1;
+}
+
+message CreateClientResponse {
+    string secret_key=1;
+}
+
+message CreateTunnelRequest {
+  string name = 1;
+  int32 port = 2;
+  string domain = 3;
+  uint32 client_id = 4;
+}
+
+message CreateTunnelResponse {
+  uint32 id = 1;
+}

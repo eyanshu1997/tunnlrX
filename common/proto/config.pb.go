@@ -24,6 +24,7 @@ const (
 type RegisterClientRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	SecretKey     string                 `protobuf:"bytes,2,opt,name=secret_key,json=secretKey,proto3" json:"secret_key,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -61,6 +62,13 @@ func (*RegisterClientRequest) Descriptor() ([]byte, []int) {
 func (x *RegisterClientRequest) GetName() string {
 	if x != nil {
 		return x.Name
+	}
+	return ""
+}
+
+func (x *RegisterClientRequest) GetSecretKey() string {
+	if x != nil {
+		return x.SecretKey
 	}
 	return ""
 }
@@ -189,194 +197,6 @@ func (x *ListClientsResponse) GetClients() []*Client {
 	return nil
 }
 
-type Client struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Port          int32                  `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
-	Ip            string                 `protobuf:"bytes,4,opt,name=ip,proto3" json:"ip,omitempty"`
-	ClientState   ClientState            `protobuf:"varint,5,opt,name=client_state,json=clientState,proto3,enum=proto.ClientState" json:"client_state,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Client) Reset() {
-	*x = Client{}
-	mi := &file_config_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Client) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Client) ProtoMessage() {}
-
-func (x *Client) ProtoReflect() protoreflect.Message {
-	mi := &file_config_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Client.ProtoReflect.Descriptor instead.
-func (*Client) Descriptor() ([]byte, []int) {
-	return file_config_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *Client) GetId() uint32 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
-func (x *Client) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *Client) GetPort() int32 {
-	if x != nil {
-		return x.Port
-	}
-	return 0
-}
-
-func (x *Client) GetIp() string {
-	if x != nil {
-		return x.Ip
-	}
-	return ""
-}
-
-func (x *Client) GetClientState() ClientState {
-	if x != nil {
-		return x.ClientState
-	}
-	return ClientState_CLIENT_STATE_UNKNOWN
-}
-
-type RegisterTunnelRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Port          int32                  `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
-	Domain        string                 `protobuf:"bytes,3,opt,name=domain,proto3" json:"domain,omitempty"`
-	ClientId      uint32                 `protobuf:"varint,4,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *RegisterTunnelRequest) Reset() {
-	*x = RegisterTunnelRequest{}
-	mi := &file_config_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *RegisterTunnelRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RegisterTunnelRequest) ProtoMessage() {}
-
-func (x *RegisterTunnelRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_config_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RegisterTunnelRequest.ProtoReflect.Descriptor instead.
-func (*RegisterTunnelRequest) Descriptor() ([]byte, []int) {
-	return file_config_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *RegisterTunnelRequest) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *RegisterTunnelRequest) GetPort() int32 {
-	if x != nil {
-		return x.Port
-	}
-	return 0
-}
-
-func (x *RegisterTunnelRequest) GetDomain() string {
-	if x != nil {
-		return x.Domain
-	}
-	return ""
-}
-
-func (x *RegisterTunnelRequest) GetClientId() uint32 {
-	if x != nil {
-		return x.ClientId
-	}
-	return 0
-}
-
-type RegisterTunnelResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *RegisterTunnelResponse) Reset() {
-	*x = RegisterTunnelResponse{}
-	mi := &file_config_proto_msgTypes[6]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *RegisterTunnelResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RegisterTunnelResponse) ProtoMessage() {}
-
-func (x *RegisterTunnelResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_config_proto_msgTypes[6]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RegisterTunnelResponse.ProtoReflect.Descriptor instead.
-func (*RegisterTunnelResponse) Descriptor() ([]byte, []int) {
-	return file_config_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *RegisterTunnelResponse) GetId() uint32 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
 type ListTunnelsRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// optional field for filter
@@ -387,7 +207,7 @@ type ListTunnelsRequest struct {
 
 func (x *ListTunnelsRequest) Reset() {
 	*x = ListTunnelsRequest{}
-	mi := &file_config_proto_msgTypes[7]
+	mi := &file_config_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -399,7 +219,7 @@ func (x *ListTunnelsRequest) String() string {
 func (*ListTunnelsRequest) ProtoMessage() {}
 
 func (x *ListTunnelsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_config_proto_msgTypes[7]
+	mi := &file_config_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -412,7 +232,7 @@ func (x *ListTunnelsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListTunnelsRequest.ProtoReflect.Descriptor instead.
 func (*ListTunnelsRequest) Descriptor() ([]byte, []int) {
-	return file_config_proto_rawDescGZIP(), []int{7}
+	return file_config_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ListTunnelsRequest) GetClientId() uint32 {
@@ -420,90 +240,6 @@ func (x *ListTunnelsRequest) GetClientId() uint32 {
 		return x.ClientId
 	}
 	return 0
-}
-
-type Tunnel struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Port          int32                  `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
-	Domain        string                 `protobuf:"bytes,4,opt,name=domain,proto3" json:"domain,omitempty"`
-	Client        *Client                `protobuf:"bytes,5,opt,name=client,proto3" json:"client,omitempty"`
-	TunnelState   TunnelState            `protobuf:"varint,6,opt,name=tunnel_state,json=tunnelState,proto3,enum=proto.TunnelState" json:"tunnel_state,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Tunnel) Reset() {
-	*x = Tunnel{}
-	mi := &file_config_proto_msgTypes[8]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Tunnel) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Tunnel) ProtoMessage() {}
-
-func (x *Tunnel) ProtoReflect() protoreflect.Message {
-	mi := &file_config_proto_msgTypes[8]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Tunnel.ProtoReflect.Descriptor instead.
-func (*Tunnel) Descriptor() ([]byte, []int) {
-	return file_config_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *Tunnel) GetId() uint32 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
-func (x *Tunnel) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *Tunnel) GetPort() int32 {
-	if x != nil {
-		return x.Port
-	}
-	return 0
-}
-
-func (x *Tunnel) GetDomain() string {
-	if x != nil {
-		return x.Domain
-	}
-	return ""
-}
-
-func (x *Tunnel) GetClient() *Client {
-	if x != nil {
-		return x.Client
-	}
-	return nil
-}
-
-func (x *Tunnel) GetTunnelState() TunnelState {
-	if x != nil {
-		return x.TunnelState
-	}
-	return TunnelState_TUNNEL_STATE_UNKNOWN
 }
 
 type ListTunnelsResponse struct {
@@ -515,7 +251,7 @@ type ListTunnelsResponse struct {
 
 func (x *ListTunnelsResponse) Reset() {
 	*x = ListTunnelsResponse{}
-	mi := &file_config_proto_msgTypes[9]
+	mi := &file_config_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -527,7 +263,7 @@ func (x *ListTunnelsResponse) String() string {
 func (*ListTunnelsResponse) ProtoMessage() {}
 
 func (x *ListTunnelsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_config_proto_msgTypes[9]
+	mi := &file_config_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -540,7 +276,7 @@ func (x *ListTunnelsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListTunnelsResponse.ProtoReflect.Descriptor instead.
 func (*ListTunnelsResponse) Descriptor() ([]byte, []int) {
-	return file_config_proto_rawDescGZIP(), []int{9}
+	return file_config_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ListTunnelsResponse) GetTunnels() []*Tunnel {
@@ -554,42 +290,23 @@ var File_config_proto protoreflect.FileDescriptor
 
 const file_config_proto_rawDesc = "" +
 	"\n" +
-	"\fconfig.proto\x12\x05proto\x1a\fcommon.proto\"+\n" +
+	"\fconfig.proto\x12\x05proto\x1a\fcommon.proto\"J\n" +
 	"\x15RegisterClientRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"(\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1d\n" +
+	"\n" +
+	"secret_key\x18\x02 \x01(\tR\tsecretKey\"(\n" +
 	"\x16RegisterClientResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\"\x14\n" +
 	"\x12ListClientsRequest\">\n" +
 	"\x13ListClientsResponse\x12'\n" +
-	"\aclients\x18\x01 \x03(\v2\r.proto.ClientR\aclients\"\x87\x01\n" +
-	"\x06Client\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
-	"\x04port\x18\x03 \x01(\x05R\x04port\x12\x0e\n" +
-	"\x02ip\x18\x04 \x01(\tR\x02ip\x125\n" +
-	"\fclient_state\x18\x05 \x01(\x0e2\x12.proto.ClientStateR\vclientState\"t\n" +
-	"\x15RegisterTunnelRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
-	"\x04port\x18\x02 \x01(\x05R\x04port\x12\x16\n" +
-	"\x06domain\x18\x03 \x01(\tR\x06domain\x12\x1b\n" +
-	"\tclient_id\x18\x04 \x01(\rR\bclientId\"(\n" +
-	"\x16RegisterTunnelResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"1\n" +
+	"\aclients\x18\x01 \x03(\v2\r.proto.ClientR\aclients\"1\n" +
 	"\x12ListTunnelsRequest\x12\x1b\n" +
-	"\tclient_id\x18\x01 \x01(\rR\bclientId\"\xb6\x01\n" +
-	"\x06Tunnel\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
-	"\x04port\x18\x03 \x01(\x05R\x04port\x12\x16\n" +
-	"\x06domain\x18\x04 \x01(\tR\x06domain\x12%\n" +
-	"\x06client\x18\x05 \x01(\v2\r.proto.ClientR\x06client\x125\n" +
-	"\ftunnel_state\x18\x06 \x01(\x0e2\x12.proto.TunnelStateR\vtunnelState\">\n" +
+	"\tclient_id\x18\x01 \x01(\rR\bclientId\">\n" +
 	"\x13ListTunnelsResponse\x12'\n" +
-	"\atunnels\x18\x01 \x03(\v2\r.proto.TunnelR\atunnels2\xb9\x02\n" +
+	"\atunnels\x18\x01 \x03(\v2\r.proto.TunnelR\atunnels2\xea\x01\n" +
 	"\rConfigService\x12M\n" +
 	"\x0eRegisterClient\x12\x1c.proto.RegisterClientRequest\x1a\x1d.proto.RegisterClientResponse\x12D\n" +
-	"\vListClients\x12\x19.proto.ListClientsRequest\x1a\x1a.proto.ListClientsResponse\x12M\n" +
-	"\x0eRegisterTunnel\x12\x1c.proto.RegisterTunnelRequest\x1a\x1d.proto.RegisterTunnelResponse\x12D\n" +
+	"\vListClients\x12\x19.proto.ListClientsRequest\x1a\x1a.proto.ListClientsResponse\x12D\n" +
 	"\vListTunnels\x12\x19.proto.ListTunnelsRequest\x1a\x1a.proto.ListTunnelsResponseB3Z1github.com/eyanshu1997/tunnlrX/common/proto;protob\x06proto3"
 
 var (
@@ -604,40 +321,31 @@ func file_config_proto_rawDescGZIP() []byte {
 	return file_config_proto_rawDescData
 }
 
-var file_config_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_config_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_config_proto_goTypes = []any{
 	(*RegisterClientRequest)(nil),  // 0: proto.RegisterClientRequest
 	(*RegisterClientResponse)(nil), // 1: proto.RegisterClientResponse
 	(*ListClientsRequest)(nil),     // 2: proto.ListClientsRequest
 	(*ListClientsResponse)(nil),    // 3: proto.ListClientsResponse
-	(*Client)(nil),                 // 4: proto.Client
-	(*RegisterTunnelRequest)(nil),  // 5: proto.RegisterTunnelRequest
-	(*RegisterTunnelResponse)(nil), // 6: proto.RegisterTunnelResponse
-	(*ListTunnelsRequest)(nil),     // 7: proto.ListTunnelsRequest
-	(*Tunnel)(nil),                 // 8: proto.Tunnel
-	(*ListTunnelsResponse)(nil),    // 9: proto.ListTunnelsResponse
-	(ClientState)(0),               // 10: proto.ClientState
-	(TunnelState)(0),               // 11: proto.TunnelState
+	(*ListTunnelsRequest)(nil),     // 4: proto.ListTunnelsRequest
+	(*ListTunnelsResponse)(nil),    // 5: proto.ListTunnelsResponse
+	(*Client)(nil),                 // 6: proto.Client
+	(*Tunnel)(nil),                 // 7: proto.Tunnel
 }
 var file_config_proto_depIdxs = []int32{
-	4,  // 0: proto.ListClientsResponse.clients:type_name -> proto.Client
-	10, // 1: proto.Client.client_state:type_name -> proto.ClientState
-	4,  // 2: proto.Tunnel.client:type_name -> proto.Client
-	11, // 3: proto.Tunnel.tunnel_state:type_name -> proto.TunnelState
-	8,  // 4: proto.ListTunnelsResponse.tunnels:type_name -> proto.Tunnel
-	0,  // 5: proto.ConfigService.RegisterClient:input_type -> proto.RegisterClientRequest
-	2,  // 6: proto.ConfigService.ListClients:input_type -> proto.ListClientsRequest
-	5,  // 7: proto.ConfigService.RegisterTunnel:input_type -> proto.RegisterTunnelRequest
-	7,  // 8: proto.ConfigService.ListTunnels:input_type -> proto.ListTunnelsRequest
-	1,  // 9: proto.ConfigService.RegisterClient:output_type -> proto.RegisterClientResponse
-	3,  // 10: proto.ConfigService.ListClients:output_type -> proto.ListClientsResponse
-	6,  // 11: proto.ConfigService.RegisterTunnel:output_type -> proto.RegisterTunnelResponse
-	9,  // 12: proto.ConfigService.ListTunnels:output_type -> proto.ListTunnelsResponse
-	9,  // [9:13] is the sub-list for method output_type
-	5,  // [5:9] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+	6, // 0: proto.ListClientsResponse.clients:type_name -> proto.Client
+	7, // 1: proto.ListTunnelsResponse.tunnels:type_name -> proto.Tunnel
+	0, // 2: proto.ConfigService.RegisterClient:input_type -> proto.RegisterClientRequest
+	2, // 3: proto.ConfigService.ListClients:input_type -> proto.ListClientsRequest
+	4, // 4: proto.ConfigService.ListTunnels:input_type -> proto.ListTunnelsRequest
+	1, // 5: proto.ConfigService.RegisterClient:output_type -> proto.RegisterClientResponse
+	3, // 6: proto.ConfigService.ListClients:output_type -> proto.ListClientsResponse
+	5, // 7: proto.ConfigService.ListTunnels:output_type -> proto.ListTunnelsResponse
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_config_proto_init() }
@@ -652,7 +360,7 @@ func file_config_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_config_proto_rawDesc), len(file_config_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
