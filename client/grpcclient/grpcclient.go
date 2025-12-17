@@ -3,8 +3,8 @@ package grpcclient
 import (
 	"fmt"
 
+	"github.com/eyanshu1997/tunnlrx/common/log"
 	"github.com/eyanshu1997/tunnlrx/common/proto"
-	"github.com/eyanshu1997/tunnlrx/common/serviceutils"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -25,11 +25,11 @@ func NewGrpcClient(host string, port int, name string) (*grpcClient, error) {
 	)
 	if err != nil {
 		err := fmt.Errorf("failed to connect to gRPC server: %v", err)
-		serviceutils.Log.Error("Error: %s", err)
+		log.Log.Error("Error: %s", err)
 		return nil, err
 	}
 
-	serviceutils.Log.Info("Connected to gRPC server at %s:%d", host, port)
+	log.Log.Info("Connected to gRPC server at %s:%d", host, port)
 	client := proto.NewConfigServiceClient(conn)
 	// Initialize and return a new gRPC client (keep connection open until Close is called)
 	return &grpcClient{conn: conn, client: client, Name: name}, nil

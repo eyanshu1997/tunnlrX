@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net"
 
+	"github.com/eyanshu1997/tunnlrx/common/log"
 	"github.com/eyanshu1997/tunnlrx/common/proto"
-	"github.com/eyanshu1997/tunnlrx/common/serviceutils"
 	"google.golang.org/grpc/peer"
 )
 
@@ -30,7 +30,7 @@ type ClientDetails struct {
 var tempid uint32 = 0
 
 func (s *TunnelXServer) RegisterClient(ctx context.Context, req *proto.RegisterClientRequest) (*proto.RegisterClientResponse, error) {
-	serviceutils.Log.Info("RegisterClient called with request: %v", req)
+	log.Log.Info("RegisterClient called with request: %v", req)
 	var clientIP string
 	var clientPort int
 	if p, ok := peer.FromContext(ctx); ok {
@@ -38,19 +38,19 @@ func (s *TunnelXServer) RegisterClient(ctx context.Context, req *proto.RegisterC
 		tcpAddr, ok := p.Addr.(*net.TCPAddr)
 		if !ok {
 			err := fmt.Errorf("unable to get the client ip and port")
-			serviceutils.Log.Error("Error: %s", err)
+			log.Log.Error("Error: %s", err)
 			return nil, err
 		}
 		clientIP = tcpAddr.IP.String()
 		clientPort = tcpAddr.Port
 		// Use clientIP and clientPort as needed
-		serviceutils.Log.Info("Client connected from IP: %s, Port: %d\n", clientIP, clientPort)
+		log.Log.Info("Client connected from IP: %s, Port: %d\n", clientIP, clientPort)
 
 	}
 	// check if existing client exists using same port and ip
 	for _, client := range s.ClientDetails {
 		if client.Ip == clientIP && client.Port == clientPort {
-			serviceutils.Log.Info("Client already exists: %v", client)
+			log.Log.Info("Client already exists: %v", client)
 			return &proto.RegisterClientResponse{
 				Id: client.Id,
 			}, nil
@@ -67,14 +67,14 @@ func (s *TunnelXServer) RegisterClient(ctx context.Context, req *proto.RegisterC
 
 	s.ClientDetails[newClient.Id] = newClient
 	tempid++
-	serviceutils.Log.Info("Registered new client: %v", newClient)
+	log.Log.Info("Registered new client: %v", newClient)
 	return &proto.RegisterClientResponse{
 		Id: newClient.Id,
 	}, nil
 }
 
 func (s *TunnelXServer) ListClients(ctx context.Context, req *proto.ListClientsRequest) (*proto.ListClientsResponse, error) {
-	serviceutils.Log.Info("ListClients called with request: %v", req)
+	log.Log.Info("ListClients called with request: %v", req)
 	var clients []*proto.Client
 	for _, client := range s.ClientDetails {
 		clients = append(clients, &proto.Client{

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net"
 
+	"github.com/eyanshu1997/tunnlrx/common/log"
 	"github.com/eyanshu1997/tunnlrx/common/proto"
-	"github.com/eyanshu1997/tunnlrx/common/serviceutils"
 	"google.golang.org/grpc"
 )
 
@@ -29,11 +29,11 @@ func GetGrpcServerAndListener(port uint32) (*grpc.Server, net.Listener, error) {
 	// initialize gRPC server
 	grpcServer := grpc.NewServer(opts...)
 	tunnelXServer := NewTunnelXServer()
-	serviceutils.Log.Debug("Registering TunnelServiceServer %s with gRPC server %s ", tunnelXServer, grpcServer)
+	log.Log.Debug("Registering TunnelServiceServer %s with gRPC server %s ", tunnelXServer, grpcServer)
 	proto.RegisterConfigServiceServer(grpcServer, tunnelXServer)
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
-		serviceutils.Log.Fatalf("Failed to listen on port %d: %v", port, err)
+		log.Log.Fatalf("Failed to listen on port %d: %v", port, err)
 		return nil, nil, err
 	}
 	return grpcServer, lis, nil

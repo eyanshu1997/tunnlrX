@@ -1,4 +1,4 @@
-package common
+package log
 
 //This file replaces the original logger for go lang with a custom logger
 //that prints logs in a structured format with timestamps and log levels, it also prints the calling filename and line number and (function).
@@ -54,19 +54,22 @@ type CustomLogger struct {
 	level logLevel
 }
 
-func InitLogger(logLevelStr string) (*CustomLogger, error) {
+var Log *CustomLogger
+
+func InitLogger(logLevelStr string) error {
 	var logLevel logLevel
 	if lvl, ok := logLevelValues[logLevelStr]; ok {
 		logLevel = lvl
 	} else {
-		return nil, fmt.Errorf("invalid log level: %s", logLevelStr)
+		return fmt.Errorf("invalid log level: %s", logLevelStr)
 	}
 
 	logger := CustomLogger{
 		level: logLevel,
 	}
 	logger.Info("Logger initialized with level %s", logLevelStr)
-	return &logger, nil
+	Log = &logger
+	return nil
 }
 
 func (l *CustomLogger) logf(level logLevel, format string, v ...interface{}) {

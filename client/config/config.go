@@ -1,15 +1,13 @@
 package config
 
 // This file contains configuration related code for the server
-// we will be using json to configure becuase its humanreadable and easy to represent different types of data and easily parasble
+// we will be using json to configure because its human readable and easy to represent different types of data and easily parasble
 // we will use a struct to represent the config and then use json package to parse it
 
 import (
 	"encoding/json"
 	"fmt"
 	"os"
-
-	"github.com/eyanshu1997/tunnlrx/common/serviceutils"
 )
 
 type TunnelConfig struct {
@@ -22,7 +20,7 @@ type ClientConfig struct {
 	ServerPort   int            `json:"port"`
 	Name         string         `json:"name"`
 	TunnelConfig []TunnelConfig `json:"tunnels"`
-	*serviceutils.ServiceConfig
+	LogLevel     string         `json:"log_level"`
 }
 
 func (s *ClientConfig) Validate() error {
@@ -32,14 +30,21 @@ func (s *ClientConfig) Validate() error {
 	if s.ServerHost == "" {
 		return fmt.Errorf("error:ServerHost cannot be empty")
 	}
-	if s.ServiceConfig == nil {
-		return fmt.Errorf("error:ServiceConfig cannot be nil")
+	if s.Name == "" {
+		return fmt.Errorf("error:Name cannot be empty")
 	}
+	if len(s.TunnelConfig) == 0 {
+		return fmt.Errorf("error:No tunnels configured")
+	}
+	if s.LogLevel == "" {
+		return fmt.Errorf("invalid log level")
+	}
+
 	return nil
 }
 
 func (s *ClientConfig) String() string {
-	return fmt.Sprintf("ClientConfig{ServerHost: %s, ServerPort: %d, ServiceConfig: %v}", s.ServerHost, s.ServerPort, s.ServiceConfig)
+	return fmt.Sprintf("ClientConfig{ServerHost: %s, ServerPort: %d, Name: %s, TunnelConfig: %v, LogLevel: %s}", s.ServerHost, s.ServerPort, s.Name, s.TunnelConfig, s.LogLevel)
 }
 
 func LoadConfig(filePath string) (*ClientConfig, error) {

@@ -1,38 +1,36 @@
 package config
 
 // This file contains configuration related code for the server
-// we will be using json to configure becuase its humanreadable and easy to represent different types of data and easily parasble
+// we will be using json to configure because its human readable and easy to represent different types of data and easily parasble
 // we will use a struct to represent the config and then use json package to parse it
 
 import (
 	"encoding/json"
 	"fmt"
 	"os"
-
-	"github.com/eyanshu1997/tunnlrx/common/serviceutils"
 )
 
 type ServerConfig struct {
-	ApiPort  int `json:"port"`
-	GrpcPort int `json:"grpc_port"`
-	*serviceutils.ServiceConfig
+	ApiPort  int    `json:"port"`
+	GrpcPort int    `json:"grpc_port"`
+	LogLevel string `json:"log_level"`
 }
 
 func (s *ServerConfig) Validate() error {
 	if s.ApiPort <= 0 || s.ApiPort > 65535 {
-		return fmt.Errorf("Invalid API port")
+		return fmt.Errorf("invalid API port")
 	}
 	if s.GrpcPort <= 0 || s.GrpcPort > 65535 {
-		return fmt.Errorf("Invalid gRPC port")
+		return fmt.Errorf("invalid gRPC port")
 	}
-	if s.ServiceConfig == nil {
-		return fmt.Errorf("ServiceConfig cannot be nil")
+	if s.LogLevel == "" {
+		return fmt.Errorf("invalid log level")
 	}
 	return nil
 }
 
 func (s *ServerConfig) String() string {
-	return fmt.Sprintf("ServerConfig{ApiPort: %d, GrpcPort: %d, ServiceConfig: %v}", s.ApiPort, s.GrpcPort, s.ServiceConfig)
+	return fmt.Sprintf("ServerConfig{ApiPort: %d, GrpcPort: %d, LogLevel: %s}", s.ApiPort, s.GrpcPort, s.LogLevel)
 }
 
 func LoadConfig(filePath string) (*ServerConfig, error) {

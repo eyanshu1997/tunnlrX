@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/eyanshu1997/tunnlrx/common/log"
 	"github.com/eyanshu1997/tunnlrx/common/proto"
-	"github.com/eyanshu1997/tunnlrx/common/serviceutils"
 )
 
 func (g *grpcClient) RegisterTunnel(ctx context.Context, port int32, domain string) error {
@@ -26,7 +26,7 @@ func (g *grpcClient) ListTunnels(ctx context.Context) error {
 	if err != nil {
 		return fmt.Errorf("failed to list clients: %v", err)
 	}
-	serviceutils.Log.Info("ListTunnels response: %v", resp)
+	log.Log.Info("ListTunnels response: %v", resp)
 	return nil
 
 }

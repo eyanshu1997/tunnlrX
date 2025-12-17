@@ -1,13 +1,14 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"time"
 
 	"github.com/eyanshu1997/tunnlrx/client/config"
 	"github.com/eyanshu1997/tunnlrx/client/grpcclient"
-	"github.com/eyanshu1997/tunnlrx/common/serviceutils"
+	"github.com/eyanshu1997/tunnlrx/common/log"
 )
 
 var configPath string
@@ -25,7 +26,6 @@ func main() {
 		fmt.Printf("Failed to load client config: %v\n", err)
 		return
 	}
-	serviceutils.InitServiceUtils(clientConfig.ServiceConfig)
 	// Initialize client with the loaded configuration
 	client, err := grpcclient.NewGrpcClient(clientConfig.ServerHost, clientConfig.ServerPort, clientConfig.Name)
 	if err != nil {
@@ -35,11 +35,11 @@ func main() {
 	defer func() {
 		_ = client.Close()
 	}()
-	serviceutils.Log.Info("Client initialized successfully:", client)
-	ctx := serviceutils.GetContextWithMetadata()
+	log.Log.Info("Client initialized successfully:", client)
 
 	// all of this code will be changed to actual implementation
 	// client will register itself and list clients from server every 30 seconds here
+	ctx := context.Background()
 	err = client.RegisterClient(ctx)
 	if err != nil {
 		fmt.Printf("Failed to register client: %v\n", err)
