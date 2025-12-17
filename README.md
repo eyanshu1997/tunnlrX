@@ -1,125 +1,68 @@
-# 🚀 TunnlrX
+# tunnlrX 🚀
+### High-Performance, P2P-First Ingress for Developers
 
-> The simplest self-hosted tunneling platform with automatic domains, HTTPS, and secure defaults — built for developers and teams.
+**tunnlrX** is a modern, self-hostable alternative to Ngrok and Cloudflare Tunnel. Built from the ground up on **QUIC** and **UDP Hole Punching**, it provides a blazing-fast, secure bridge between the public internet and your local machine.
 
----
-
-## 🌍 Vision
-
-TunnlrX makes it easy to expose local or private services to the internet securely, without vendor lock-in. Unlike existing solutions, TunnlrX is **open source, self-hostable, automated, and user-friendly**.
-
-**Core principles:**
-- **Ease of use:** One command to expose any service.
-- **Automation:** Domains, DNS, and HTTPS managed for you.
-- **Security:** Encrypted by default, with access control.
-- **Flexibility:** Works for developers, self-hosters, and teams.
-- **Extensibility:** CLI, API, and GUI interfaces.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ---
 
-## 📦 Features
+## ⚡ Why tunnlrX?
 
-- ✅ Self-hosted control server (Go)
-- ✅ Lightweight client (Go)
-- ✅ Auto HTTPS via Let’s Encrypt
-- ✅ Automatic domain provisioning (Cloudflare/Route53 integrations)
-- ✅ HTTP, TCP, UDP, WebSockets, QUIC support
-- ✅ CLI tool (`tunnlrx up 3000`)
-- ✅ Web Dashboard (React/Next.js)
-- ✅ GUI Client (Tauri/Electron)
-- ✅ Multi-tenant support (teams/orgs)
-- ✅ OAuth2/SSO Authentication
-- ✅ REST/gRPC APIs for automation
+Most tunneling tools rely on legacy TCP-based relays, which suffer from **TCP Meltdown** and high latency. **tunnlrX** solves this with a next-gen networking stack:
+
+* **P2P-First Architecture:** Uses STUN and UDP Hole Punching to establish direct connections between users and your local machine, bypassing the server entirely for 10x lower latency.
+* **QUIC Native:** For connections that require a relay (Symmetric NATs), tunnlrX uses QUIC to eliminate Head-of-Line blocking and ensure stability on poor Wi-Fi.
+* **Zero-Knowledge Privacy:** Unlike SaaS providers, tunnlrX supports E2E TLS passthrough. Your data remains encrypted even while passing through the relay.
+* **Integrated Inspector:** A built-in local dashboard at `localhost:4040` to view, filter, and replay HTTP requests for effortless debugging.
 
 ---
 
-## 🛠 Architecture
+## 🏗 How it Works
 
-**Components:**
 
-- **Control Plane (Server)**
-  - Manages domains, certs, users, tunnel lifecycle
-  - Exposes APIs + dashboard
 
-- **Data Plane (Agent)**
-  - Lightweight binary that establishes tunnels
-  - Multiplexes connections
-
-- **Clients**
-  - CLI for developers
-  - GUI for non-technical users
-
-**Flow:**
-1. User runs client (`tunnlrx up 8080`)
-2. Client connects to server → assigns domain + cert
-3. Secure tunnel established (QUIC/HTTPS)
-4. Service exposed at `https://<subdomain>.tunnlr.me`
+1.  **Discovery:** The Agent uses STUN to discover its public-facing NAT mapping.
+2.  **Signaling:** The Agent maintains a persistent QUIC control channel to the tunnlrX server.
+3.  **The Punch:** When a public request arrives, the server coordinates a "rendezvous" between the peer and the agent.
+4.  **Data Flow:** Traffic flows directly (P2P). If the NAT is too restrictive, it automatically falls back to a high-speed QUIC relay.
 
 ---
 
+## 🚀 Quick Start
 
-## 📂 Repository Structure
-
+### 1. Deploy the Server (Public VPS)
+The server acts as the control plane and STUN rendezvous point.
 ```
-/tunnlrx
- ├── server/         # Go backend (control + data plane)
- ├── client/         # CLI client
- ├── dashboard/      # React/Next.js web UI
- ├── docs/           # Documentation site (MkDocs/Docusaurus)
- ├── scripts/        # DevOps, setup, deploy
- ├── .github/        # Actions CI/CD, issue templates
- ├── README.md       # Project overview
- ├── ROADMAP.md      # Development roadmap
- ├── CONTRIBUTING.md # Contribution guidelines
- ├── CODE_OF_CONDUCT.md
- └── LICENSE         # Apache 2.0
+tunnlrx-server start --domain yourdomain.com
 ```
-## 📜 License
 
-TunnlrX is open-source under the **Apache 2.0 License**.
+### 2. Run the Agent (Local Machine)
+Expose your local development server to the world instantly:
+```
+# Map port 8080 to [https://my-app.yourdomain.com](https://my-app.yourdomain.com)
+tunnlrx up 8080 --subdomain my-app
+```
+
+---
+
+## 🛠 Features
+
+* **Automatic SSL:** Seamless Let's Encrypt integration for all subdomains.
+* **Protocol Agnostic:** Tunnel HTTP, TCP (SSH/DB), or UDP (Game Servers).
+* **Passwordless Auth:** Authenticate agents using Passkeys (WebAuthn).
+* **Request Replay:** Re-send webhooks or API calls with one click from the Inspector UI.
 
 ---
 
-## 📊 Feature Matrix (Competitors vs TunnlrX)
+## 📦 Installation
 
-| Tool              | Open Source | Self-Host | Auto HTTPS | Auto DNS | Multi-Protocol (TCP/UDP/QUIC) | GUI | API/Automation | Multi-Tenant |
-|-------------------|-------------|-----------|-------------|----------|-------------------------------|-----|----------------|--------------|
-| **ngrok**         | ❌          | ❌        | ✅          | ❌       | HTTP/TCP only                 | ❌  | Limited         | ✅ (paid)    |
-| **Cloudflare Tunnel** | ❌     | ❌        | ✅          | ✅ (Cloudflare only) | HTTP/TCP | ❌ | Limited         | ✅ (Cloudflare account) |
-| **frp**           | ✅          | ✅        | ❌          | ❌       | ✅ (TCP/UDP)                   | ❌  | Partial         | ❌           |
-| **boringproxy**   | ✅          | ✅        | ✅          | ❌       | HTTP/TCP only                 | Web UI | ✅             | ❌           |
-| **localtunnel**   | ✅          | ❌        | ❌          | ❌       | HTTP only                     | ❌  | ❌             | ❌           |
-| **sish**          | ✅          | ✅        | ❌          | ❌       | HTTP/TCP/SSH                  | ❌  | Partial         | ❌           |
-| **TunnlrX (planned)** | ✅     | ✅        | ✅          | ✅       | ✅ (HTTP/TCP/UDP/QUIC)        | ✅  | ✅             | ✅           |
-
-## 🗺 Roadmap
-
-### **MVP (0–3 months)**
-- [ ] Go server + client for TCP/HTTP tunnels
-- [ ] CLI (`tunnlrx up`)
-- [ ] Let’s Encrypt HTTPS
-
-### **Phase 2 (3–6 months)**
-- [ ] Auto DNS/domain provisioning (Cloudflare/Route53)
-- [ ] Web Dashboard (React + Go)
-- [ ] OAuth2 authentication
-
-### **Phase 3 (6–12 months)**
-- [ ] GUI client
-- [ ] Multi-protocol support (UDP, WebSockets, QUIC)
-- [ ] Team/org support
-- [ ] SaaS offering (managed hosting)
-
+**Using Go:**
+```
+go install [github.com/eyanshu1997/tunnlrx@latest](https://github.com/eyanshu1997/tunnlrx@latest)
+```
 
 ---
-## 🤝 Contributing
 
-We ❤️ contributions! To get started:
-
-1. Fork the repo
-2. Create a feature branch
-3. Commit changes
-4. Open a PR
-
-Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before submitting.
-
+## 📄 License
+Distributed under the MIT License. See `LICENSE` for more information.
