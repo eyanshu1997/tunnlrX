@@ -1,9 +1,7 @@
 package serviceutils
 
 type LogConfig struct {
-	Level        string `json:"level"`
-	FilePath     string `json:"file_path"`
-	IncludeStdio bool   `json:"include_stdio"`
+	Level string `json:"level"`
 }
 
 type ServiceConfig struct {

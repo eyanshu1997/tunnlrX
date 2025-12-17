@@ -21,9 +21,7 @@ package common
 
 import (
 	"fmt"
-	"io"
 	"log"
-	"os"
 	"path/filepath"
 	"runtime"
 	"time"
@@ -52,42 +50,21 @@ var logLevelValues = map[string]logLevel{
 }
 
 type CustomLogger struct {
-	*log.Logger
-	level        logLevel
-	logFilePath  string
-	includeStdio bool
+	level logLevel
 }
 
-func InitLogger(logLevelStr string, logFilePath string, includeStdio bool) (*CustomLogger, error) {
+func InitLogger(logLevelStr string) (*CustomLogger, error) {
 	var logLevel logLevel
 	if lvl, ok := logLevelValues[logLevelStr]; ok {
 		logLevel = lvl
 	} else {
 		return nil, fmt.Errorf("invalid log level: %s", logLevelStr)
 	}
-	// Create log directory if it doesn't exist
-	logDir := filepath.Dir(logFilePath)
-	if _, err := os.Stat(logDir); os.IsNotExist(err) {
-		os.MkdirAll(logDir, os.ModePerm)
-	}
-	logFile, err := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		fmt.Printf("Could not open log file %s, using default stderr\n", logFilePath)
-		return nil, err
-	}
-	var multiWriter io.Writer
-	if includeStdio {
-		multiWriter = io.MultiWriter(os.Stdout, logFile)
-	} else {
-		multiWriter = io.MultiWriter(logFile)
-	}
+
 	logger := CustomLogger{
-		Logger:       log.New(multiWriter, "", 0), // Disable default flags
-		level:        logLevel,
-		logFilePath:  logFilePath,
-		includeStdio: includeStdio,
+		level: logLevel,
 	}
-	logger.Info("Logger initialized with level %s, log file: %s, include stdio: %v", logLevelStr, logFilePath, includeStdio)
+	logger.Info("Logger initialized with level %s", logLevelStr)
 	return &logger, nil
 }
 
@@ -105,7 +82,7 @@ func (l *CustomLogger) logf(level logLevel, format string, v ...interface{}) {
 		callerInfo = fmt.Sprintf("%s:%d", filepath.Base(file), line)
 	}
 	prefix := fmt.Sprintf("%s [%s] %s - ", now, logLevelNames[level], callerInfo)
-	l.Printf(prefix+format, v...)
+	log.Printf(prefix+format, v...)
 }
 
 func (l *CustomLogger) Panic(format string, v ...interface{}) {

@@ -15,7 +15,7 @@ var (
 
 func InitServiceUtils(serviceConfig *ServiceConfig) {
 	var err error
-	Log, err = logger.InitLogger(serviceConfig.Log.Level, serviceConfig.Log.FilePath+serviceConfig.ServiceName+".log", serviceConfig.Log.IncludeStdio)
+	Log, err = logger.InitLogger(serviceConfig.Log.Level)
 	if err != nil {
 		panic("Failed to initialize logger: " + err.Error())
 	}
