@@ -30,7 +30,7 @@ type ClientDetails struct {
 var tempid uint32 = 0
 
 func (s *TunnelXServer) RegisterClient(ctx context.Context, req *proto.RegisterClientRequest) (*proto.RegisterClientResponse, error) {
-	log.Log.Info("RegisterClient called with request: %v", req)
+	log.Info("RegisterClient called with request: %v", req)
 	var clientIP string
 	var clientPort int
 	if p, ok := peer.FromContext(ctx); ok {
@@ -38,19 +38,19 @@ func (s *TunnelXServer) RegisterClient(ctx context.Context, req *proto.RegisterC
 		tcpAddr, ok := p.Addr.(*net.TCPAddr)
 		if !ok {
 			err := fmt.Errorf("unable to get the client ip and port")
-			log.Log.Error("Error: %s", err)
+			log.Error("Error: %s", err)
 			return nil, err
 		}
 		clientIP = tcpAddr.IP.String()
 		clientPort = tcpAddr.Port
 		// Use clientIP and clientPort as needed
-		log.Log.Info("Client connected from IP: %s, Port: %d\n", clientIP, clientPort)
+		log.Info("Client connected from IP: %s, Port: %d\n", clientIP, clientPort)
 
 	}
 	// check if existing client exists using same port and ip
 	for _, client := range s.ClientDetails {
 		if client.Ip == clientIP && client.Port == clientPort {
-			log.Log.Info("Client already exists: %v", client)
+			log.Info("Client already exists: %v", client)
 			return &proto.RegisterClientResponse{
 				Id: client.Id,
 			}, nil
@@ -67,14 +67,14 @@ func (s *TunnelXServer) RegisterClient(ctx context.Context, req *proto.RegisterC
 
 	s.ClientDetails[newClient.Id] = newClient
 	tempid++
-	log.Log.Info("Registered new client: %v", newClient)
+	log.Info("Registered new client: %v", newClient)
 	return &proto.RegisterClientResponse{
 		Id: newClient.Id,
 	}, nil
 }
 
 func (s *TunnelXServer) ListClients(ctx context.Context, req *proto.ListClientsRequest) (*proto.ListClientsResponse, error) {
-	log.Log.Info("ListClients called with request: %v", req)
+	log.Info("ListClients called with request: %v", req)
 	var clients []*proto.Client
 	for _, client := range s.ClientDetails {
 		clients = append(clients, &proto.Client{

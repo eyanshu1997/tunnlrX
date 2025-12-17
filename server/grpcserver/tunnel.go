@@ -26,7 +26,7 @@ type TunnelDetails struct {
 }
 
 func (s *TunnelXServer) RegisterTunnel(ctx context.Context, req *proto.RegisterTunnelRequest) (*proto.RegisterTunnelResponse, error) {
-	log.Log.Info("RegisterTunnel called with request: %v", req)
+	log.Info("RegisterTunnel called with request: %v", req)
 	newTunnel := TunnelDetails{
 		Id:       tempid,
 		Name:     req.GetName(),
@@ -36,19 +36,19 @@ func (s *TunnelXServer) RegisterTunnel(ctx context.Context, req *proto.RegisterT
 	// check if client id is present
 	if _, ok := s.ClientDetails[newTunnel.ClientId]; !ok {
 		err := fmt.Errorf("client id %d not found", newTunnel.ClientId)
-		log.Log.Error("Error: %s", err)
+		log.Error("Error: %s", err)
 		return nil, err
 	}
 	s.TunnelDetails[newTunnel.Id] = newTunnel
 	tempid++
-	log.Log.Info("Registered new tunnel: %v", newTunnel)
+	log.Info("Registered new tunnel: %v", newTunnel)
 	return &proto.RegisterTunnelResponse{
 		Id: newTunnel.Id,
 	}, nil
 }
 
 func (s *TunnelXServer) ListTunnels(ctx context.Context, req *proto.ListTunnelsRequest) (*proto.ListTunnelsResponse, error) {
-	log.Log.Info("ListTunnels called with request: %v", req)
+	log.Info("ListTunnels called with request: %v", req)
 	// check if optional client id is sent
 	var tunnels []*proto.Tunnel
 	for _, tunnel := range s.TunnelDetails {
@@ -58,7 +58,7 @@ func (s *TunnelXServer) ListTunnels(ctx context.Context, req *proto.ListTunnelsR
 		client, ok := s.ClientDetails[tunnel.ClientId]
 		if !ok {
 			err := fmt.Errorf("client id %d not found", tunnel.ClientId)
-			log.Log.Error("Error: %s", err)
+			log.Error("Error: %s", err)
 			return nil, err
 		}
 		tunnels = append(tunnels, &proto.Tunnel{

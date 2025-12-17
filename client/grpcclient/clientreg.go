@@ -16,7 +16,7 @@ func (g *grpcClient) RegisterClient(ctx context.Context) error {
 		return fmt.Errorf("failed to register client: %v", err)
 	}
 	g.id = resp.GetId()
-	log.Log.Info("RegisterClient got id: %d", g.id)
+	log.Info("RegisterClient got id: %d", g.id)
 	return nil
 }
 
@@ -25,6 +25,6 @@ func (g *grpcClient) ListClients(ctx context.Context) error {
 	if err != nil {
 		return fmt.Errorf("failed to list clients: %v", err)
 	}
-	log.Log.Info("ListClients response: %v", resp)
+	log.Info("ListClients response: %v", resp)
 	return nil
 }

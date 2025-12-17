@@ -29,11 +29,11 @@ func GetGrpcServerAndListener(port uint32) (*grpc.Server, net.Listener, error) {
 	// initialize gRPC server
 	grpcServer := grpc.NewServer(opts...)
 	tunnelXServer := NewTunnelXServer()
-	log.Log.Debug("Registering TunnelServiceServer %s with gRPC server %s ", tunnelXServer, grpcServer)
+	log.Debug("Registering TunnelServiceServer %s with gRPC server %s ", tunnelXServer, grpcServer)
 	proto.RegisterConfigServiceServer(grpcServer, tunnelXServer)
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
-		log.Log.Fatalf("Failed to listen on port %d: %v", port, err)
+		log.Fatalf("Failed to listen on port %d: %v", port, err)
 		return nil, nil, err
 	}
 	return grpcServer, lis, nil

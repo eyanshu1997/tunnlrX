@@ -26,6 +26,9 @@ func main() {
 		fmt.Printf("Failed to load client config: %v\n", err)
 		return
 	}
+
+	log.InitLogger(clientConfig.LogLevel)
+
 	// Initialize client with the loaded configuration
 	client, err := grpcclient.NewGrpcClient(clientConfig.ServerHost, clientConfig.ServerPort, clientConfig.Name)
 	if err != nil {
@@ -35,7 +38,7 @@ func main() {
 	defer func() {
 		_ = client.Close()
 	}()
-	log.Log.Info("Client initialized successfully:", client)
+	log.Info("Client initialized successfully:", client)
 
 	// all of this code will be changed to actual implementation
 	// client will register itself and list clients from server every 30 seconds here

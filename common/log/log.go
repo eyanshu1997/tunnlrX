@@ -54,7 +54,7 @@ type CustomLogger struct {
 	level logLevel
 }
 
-var Log *CustomLogger
+var logger *CustomLogger
 
 func InitLogger(logLevelStr string) error {
 	var logLevel logLevel
@@ -64,16 +64,14 @@ func InitLogger(logLevelStr string) error {
 		return fmt.Errorf("invalid log level: %s", logLevelStr)
 	}
 
-	logger := CustomLogger{
+	logger = &CustomLogger{
 		level: logLevel,
 	}
-	logger.Info("Logger initialized with level %s", logLevelStr)
-	Log = &logger
 	return nil
 }
 
 func (l *CustomLogger) logf(level logLevel, format string, v ...interface{}) {
-	if level > l.level {
+	if level > logger.level {
 		// Below the current log level, do not log
 		// for eg if current level is INFO, do not log DEBUG
 		return
@@ -89,24 +87,24 @@ func (l *CustomLogger) logf(level logLevel, format string, v ...interface{}) {
 	log.Printf(prefix+format, v...)
 }
 
-func (l *CustomLogger) Panic(format string, v ...interface{}) {
-	l.logf(PANIC, format, v...)
+func Panic(format string, v ...interface{}) {
+	logger.logf(PANIC, format, v...)
 	panic(fmt.Sprintf(format, v...))
 }
 
-func (l *CustomLogger) Error(format string, v ...interface{}) {
-	l.logf(ERROR, format, v...)
+func Error(format string, v ...interface{}) {
+	logger.logf(ERROR, format, v...)
 }
 
-func (l *CustomLogger) Info(format string, v ...interface{}) {
-	l.logf(INFO, format, v...)
+func Info(format string, v ...interface{}) {
+	logger.logf(INFO, format, v...)
 }
 
-func (l *CustomLogger) Fatalf(format string, v ...interface{}) {
-	l.logf(ERROR, format, v...)
+func Fatalf(format string, v ...interface{}) {
+	logger.logf(ERROR, format, v...)
 	os.Exit(1)
 }
 
-func (l *CustomLogger) Debug(format string, v ...interface{}) {
-	l.logf(DEBUG, format, v...)
+func Debug(format string, v ...interface{}) {
+	logger.logf(DEBUG, format, v...)
 }

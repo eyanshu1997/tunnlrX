@@ -26,7 +26,7 @@ func (g *grpcClient) ListTunnels(ctx context.Context) error {
 	if err != nil {
 		return fmt.Errorf("failed to list clients: %v", err)
 	}
-	log.Log.Info("ListTunnels response: %v", resp)
+	log.Info("ListTunnels response: %v", resp)
 	return nil
 
 }

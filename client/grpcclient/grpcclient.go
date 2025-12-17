@@ -25,11 +25,11 @@ func NewGrpcClient(host string, port int, name string) (*grpcClient, error) {
 	)
 	if err != nil {
 		err := fmt.Errorf("failed to connect to gRPC server: %v", err)
-		log.Log.Error("Error: %s", err)
+		log.Error("Error: %s", err)
 		return nil, err
 	}
 
-	log.Log.Info("Connected to gRPC server at %s:%d", host, port)
+	log.Info("Connected to gRPC server at %s:%d", host, port)
 	client := proto.NewConfigServiceClient(conn)
 	// Initialize and return a new gRPC client (keep connection open until Close is called)
 	return &grpcClient{conn: conn, client: client, Name: name}, nil
