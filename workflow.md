@@ -12,11 +12,14 @@
 
 ```mermaid
 flowchart LR
-    A[Server Node] -->|Configure| B(Client 1)
+    A[Server Node] -->|Configure| Client1
     A[Server Node] -->|Configure| Client2
-    D{Internet} ==> |Req| B
-    B ==> |Proxy Req|Client2
+    D{Internet} ==> |Req| IngressServer
+    IngressServer ==> |Proxy Req|Node
     subgraph Client2
         Node --> Service
+    end
+    subgraph Client1
+        IngressServer
     end
 ```
