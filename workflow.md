@@ -16,7 +16,7 @@ flowchart LR
     A[Server Node] -->|Configure| Client2
     D{Internet} ==> |Req| IngressServer
     IngressServer ==> |Proxy Req|Node
-    D ==>|rest api|A
+    E{UI} ==>|rest api|A
     subgraph Client2
         Node --> Service
     end
