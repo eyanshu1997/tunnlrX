@@ -1,7 +1,6 @@
 package grpcserver
 
 import (
-	"context"
 	"fmt"
 	"net"
 
@@ -10,76 +9,18 @@ import (
 	"google.golang.org/grpc"
 )
 
-type ClientState int
-
-const (
-	Unknown ClientState = iota
-	Inactive
-	Active
-	Inprogress
-)
-
-type ClientDetails struct {
-	Id     uint32
-	Name   string
-	Port   int
-	Ip     string
-	Domain string
-	State  ClientState
-}
-
 type TunnelXServer struct {
 	// Add fields as necessary, e.g., database connections, configurations, etc.
-	TunnelDetails map[uint32]ClientDetails // Example field to hold tunnel states
+	ClientDetails map[uint32]ClientDetails // Example field to hold tunnel states
+	TunnelDetails map[uint32]TunnelDetails // Example field to hold tunnel states
 	proto.UnimplementedConfigServiceServer
 }
 
 func NewTunnelXServer() *TunnelXServer {
 	return &TunnelXServer{
-		TunnelDetails: make(map[uint32]ClientDetails),
+		ClientDetails: make(map[uint32]ClientDetails),
+		TunnelDetails: make(map[uint32]TunnelDetails),
 	}
-}
-
-func GenerateDomainName(clientId uint32) string {
-	return fmt.Sprintf("client-%d.tunnlrx.example.com", clientId)
-}
-
-var tempid uint32 = 0
-
-func (s *TunnelXServer) RegisterClient(ctx context.Context, req *proto.RegisterClientRequest) (*proto.RegisterClientResponse, error) {
-	serviceutils.Log.Info("RegisterClient called with request: %v", req)
-	// TODO get ip and port details from the context metadata
-
-	newClient := ClientDetails{
-		Id:     tempid,
-		Name:   req.GetName(),
-		Domain: GenerateDomainName(tempid),
-		State:  Inprogress,
-	}
-
-	s.TunnelDetails[newClient.Id] = newClient
-	tempid++
-	serviceutils.Log.Info("Registered new client: %v", newClient)
-	return &proto.RegisterClientResponse{
-		Id:     newClient.Id,
-		Domain: newClient.Domain,
-	}, nil
-}
-
-func (s *TunnelXServer) ListClients(ctx context.Context, req *proto.ListClientsRequest) (*proto.ListClientsResponse, error) {
-	serviceutils.Log.Info("ListClients called with request: %v", req)
-	var clients []*proto.Client
-	for _, client := range s.TunnelDetails {
-		clients = append(clients, &proto.Client{
-			Id:          client.Id,
-			Name:        client.Name,
-			Domain:      client.Domain,
-			ClientState: proto.ClientState(client.State),
-		})
-	}
-	return &proto.ListClientsResponse{
-		Clients: clients,
-	}, nil
 }
 
 func GetGrpcServerAndListener(port uint32) (*grpc.Server, net.Listener, error) {

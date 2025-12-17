@@ -1,8 +1,9 @@
 # Project-level Makefile for TunnlrX
 
-PROTO_SRC := common/proto/config.proto
+PROTO_PATH := common/proto
+PROTO_SRC := $(PROTO_PATH)/config.proto $(PROTO_PATH)/common.proto
 
-PROTOC_GEN_GO := protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:.
+PROTOC_GEN_GO := protoc --proto_path=$(PROTO_PATH) --go_out=paths=source_relative:./$(PROTO_PATH) --go-grpc_out=paths=source_relative:./$(PROTO_PATH)
 
 .PHONY: all proto server client clean deps
 

@@ -2,11 +2,20 @@ syntax = "proto3";
 
 package proto;
 
+import "common.proto";
+
 option go_package = "github.com/eyanshu1997/tunnlrX/common/proto;proto";
 
+// ConfigService is the main service that the server will implement for config sharing
 service ConfigService {
+  // RegisterClient is used to register a new client to the server
   rpc RegisterClient (RegisterClientRequest) returns (RegisterClientResponse);
+  // ListClients is used to list all the clients registered to the server
   rpc ListClients (ListClientsRequest) returns (ListClientsResponse);
+  // RegisterTunnel is used to register a new tunnel to the server
+  rpc RegisterTunnel (RegisterTunnelRequest) returns (RegisterTunnelResponse);
+  // ListTunnels is used to list all the tunnels registered to the server
+  rpc ListTunnels (ListTunnelsRequest) returns (ListTunnelsResponse);
 }
 
 message RegisterClientRequest {
@@ -15,27 +24,50 @@ message RegisterClientRequest {
 
 message RegisterClientResponse {
   uint32 id = 1;
-  string domain = 2;
 }
 
 message ListClientsRequest {}
 
 message ListClientsResponse {
-  repeated Client Clients = 1;
+  repeated Client clients = 1;
 }
 
-enum ClientState {
-  ClientStateUnknown = 0;
-  ClientStateActive = 1;
-  ClientStateInActive = 2;
-  ClientStateInProgress = 3;
-}
 
 message Client {
   uint32 id = 1;
   string name = 2;
   int32 port = 3;
   string ip = 4;
-  string domain = 5;
-  ClientState ClientState = 6;
+  ClientState client_state = 5;
+}
+
+message RegisterTunnelRequest {
+  string name = 1;
+  int32 port = 2;
+  string domain = 3;
+  uint32 client_id = 4;
+}
+
+message RegisterTunnelResponse {
+  uint32 id = 1;
+}
+
+message ListTunnelsRequest {
+  // optional field for filter
+  uint32 client_id = 1;
+}
+
+
+message Tunnel {
+  uint32 id = 1;
+  string name = 2;
+  int32 port = 3;
+  string domain = 4;
+  Client client = 5;
+  TunnelState tunnel_state = 6;
+}
+
+
+message ListTunnelsResponse {
+  repeated Tunnel tunnels = 1;
 }

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/eyanshu1997/tunnlrX/common/proto;proto";
+
+enum ClientState {
+  CLIENT_STATE_UNKNOWN = 0;
+  CLIENT_STATE_ACTIVE = 1;
+  CLIENT_STATE_IN_ACTIVE = 2;
+  CLIENT_STATE_IN_PROGRESS = 3;
+}
+
+enum TunnelState {
+  TUNNEL_STATE_UNKNOWN = 0;
+  TUNNEL_STATE_ACTIVE = 1;
+  TUNNEL_STATE_IN_ACTIVE = 2;
+  TUNNEL_STATE_IN_PROGRESS = 3; 
+}
