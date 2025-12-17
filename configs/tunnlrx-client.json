@@ -1,23 +1,17 @@
-
 {
     "host": "localhost",
     "port": 9090,
     "name": "SampleClient1",
     "tunnels": [
         {
-            "port" : 8080,
+            "port": 8080,
             "domain": "firstDomain8080"
         },
         {
-            "port" : 8081,
+            "port": 8081,
             "domain": "secondDomain8081"
         }
     ],
-    "log": {
-        "level": "info",
-        "file_path": "logs",
-        "include_stdio": true
-    },
+    "log_level": "info",
     "serviceName": "tunnlrxClient"
- 
 }

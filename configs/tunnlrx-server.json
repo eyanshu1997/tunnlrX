@@ -1,13 +1,6 @@
-
 {
     "port": 8080,
     "grpc_port": 9090,
-    "log": {
-        "level": "info",
-        "file_path": "logs",
-        "include_stdio": true
-    },
+    "log_level": "info",
     "serviceName": "tunnlrxServer"
-
- 
 }

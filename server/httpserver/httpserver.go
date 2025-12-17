@@ -14,7 +14,8 @@ var handleFuncList = []handleFuncEntry{
 	{pattern: "/health", handler: func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("OK"))
 	}},
-	// Add more handlers here as needed
+	// Add a catch all handler
+	{pattern: "/", handler: proxyHandler},
 }
 
 type HttpServer struct {
@@ -35,4 +36,11 @@ func NewHttpServer(port int) *HttpServer {
 
 func (s *HttpServer) Start() error {
 	return http.ListenAndServe(fmt.Sprintf(":%d", s.port), s.httpMux)
+}
+
+func proxyHandler(w http.ResponseWriter, r *http.Request) {
+	// lets read the host name of the request
+	host := r.Host
+	fmt.Fprintf(w, "Hello from proxy handler, you requested for host: %s", host)
+	w.WriteHeader(http.StatusOK)
 }
