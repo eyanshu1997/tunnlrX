@@ -1,4 +1,4 @@
-# tunnlrX 🚀
+# tunnlrX 🚀  [In Progress - Not ready]
 ### The Unified Connectivity Engine: Public Ingress & P2P Mesh
 
 **tunnlrX** is a next-generation networking tool that combines the instant accessibility of **Ngrok** with the secure, high-performance P2P mesh of **WireGuard**. Whether you need a public URL for a webhook or a private, zero-latency tunnel to your home lab, tunnlrX handles it through a single, lightweight Go agent.
