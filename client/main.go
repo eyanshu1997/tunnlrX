@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/eyanshu1997/tunnlrx/client/config"
-	"github.com/eyanshu1997/tunnlrx/client/grpcclient"
-	"github.com/eyanshu1997/tunnlrx/common/log"
+	"github.com/eyanshu1997/tunnlrX/client/config"
+	"github.com/eyanshu1997/tunnlrX/client/grpcclient"
+	"github.com/eyanshu1997/tunnlrX/common/log"
 )
 
 var configPath string

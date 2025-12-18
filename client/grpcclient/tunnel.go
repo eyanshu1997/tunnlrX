@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/eyanshu1997/tunnlrx/common/log"
-	"github.com/eyanshu1997/tunnlrx/common/proto"
+	"github.com/eyanshu1997/tunnlrX/common/log"
+	"github.com/eyanshu1997/tunnlrX/common/proto"
 )
 
 func (g *grpcClient) RegisterTunnel(ctx context.Context, port int32, domain string) error {

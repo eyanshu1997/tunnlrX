@@ -75,7 +75,7 @@ tunnlrx join --alias my-laptop
 
 **Using Go:**
 ```bash
-go install [github.com/eyanshu1997/tunnlrx@latest](https://github.com/eyanshu1997/tunnlrx@latest)
+go install [github.com/eyanshu1997/tunnlrX@latest](https://github.com/eyanshu1997/tunnlrX@latest)
 ```
 
 ---

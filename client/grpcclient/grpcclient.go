@@ -3,8 +3,8 @@ package grpcclient
 import (
 	"fmt"
 
-	"github.com/eyanshu1997/tunnlrx/common/log"
-	"github.com/eyanshu1997/tunnlrx/common/proto"
+	"github.com/eyanshu1997/tunnlrX/common/log"
+	"github.com/eyanshu1997/tunnlrX/common/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -19,7 +19,7 @@ type grpcClient struct {
 
 func NewGrpcClient(host string, port int, name string) (*grpcClient, error) {
 	addr := fmt.Sprintf("%s:%d", host, port)
-	conn, err := grpc.NewClient(
+	conn, err := grpc.Dial(
 		addr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)

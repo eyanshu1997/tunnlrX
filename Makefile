@@ -1,13 +1,7 @@
 # Project-level Makefile for TunnlrX
+BUF_VERSION:=v1.17.0
+SWAGGER_UI_VERSION:=v4.15.5
 
-PROTO_PATH := common/proto
-PROTO_SRC := $(PROTO_PATH)/config.proto $(PROTO_PATH)/common.proto
-
-PROTOC_GEN_GO := protoc --proto_path=$(PROTO_PATH) --go_out=paths=source_relative:./$(PROTO_PATH) --go-grpc_out=paths=source_relative:./$(PROTO_PATH)
-
-.PHONY: all proto server client clean deps
-
-all:  proto server client
 
 deps:
 	@which go > /dev/null || (echo "Error: Go (golang) is not installed or not in PATH." && exit 1)
@@ -15,21 +9,29 @@ deps:
 	@which protoc-gen-go > /dev/null || go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	@which protoc-gen-go-grpc > /dev/null || go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
+
+
+all:  generate server client
+
+generate: tidy proto swagger-ui
+
 proto: deps
-	cd common && go mod tidy
-	$(PROTOC_GEN_GO) $(PROTO_SRC)
+	go run github.com/bufbuild/buf/cmd/buf@$(BUF_VERSION) generate
+
+swagger-ui:
+	SWAGGER_UI_VERSION=$(SWAGGER_UI_VERSION) ./scripts/generate-swagger-ui.sh
+
+tidy:
+	go mod tidy
 
 server: 
-	cd server && go mod tidy && go build -o ../build/tunnlrx-server
+	cd server &&  go build -o ../build/tunnlrx-server
 
 client: 
-	cd client && go mod tidy && go build -o ../build/tunnlrx-client
+	cd client && go build -o ../build/tunnlrx-client
 
-qserver: 
-	cd server && go build -o ../build/tunnlrx-server
-
-qclient: 
-	cd client  && go build -o ../build/tunnlrx-client
+swagger:
+	cd swagger-server && go build -o ../build/tunnelrx-swagger-server
 
 clean:
 	rm -f common/proto/*.pb.go
@@ -48,6 +50,10 @@ CLIENT_NO ?= 1
 run_client:
 	nohup ./build/tunnlrx-client -config=configs/tunnlrx-client.json > logs/tunnlrx-client$(CLIENT_NO).log 2>&1 &
 
+run_swagger:
+	nohup ./build/tunnelrx-swagger-server > logs/swagger-server.log 2>&1 &
+
 stop_all:
 	pkill tunnlrx-server || true
 	pkill tunnlrx-client || true
+	pkill tunnelrx-swagger-server || true

@@ -2,3 +2,6 @@ build/*
 docs/*
 logs/*
 
+.vscode
+.cache/
+third_party/OpenAPI

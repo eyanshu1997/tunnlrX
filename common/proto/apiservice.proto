@@ -4,35 +4,55 @@ package proto;
 
 import "common.proto";
 import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 
 option go_package = "github.com/eyanshu1997/tunnlrX/common/proto;proto";
 
+
+// These annotations are used when generating the OpenAPI file.
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {version: "1.0"};
+  external_docs: {
+    url: "https://github.com/eyanshu1997/tunnlrX";
+    description: "TunnlrX API Documentation";
+  }
+  schemes: HTTPS;
+};
+
 // TunnlrxApiServeice is the main service that is used to configure the server
 service TunnlrxApiServeice{
-    rpc CreateClient(CreateClientRequest) returns (CreateClientResponse){
-        option (google.api.http) = {
-            post: "/api/v1/client/create"
-            body: "*"
-        
-        }
+  rpc CreateClient(CreateClientRequest) returns (CreateClientResponse){
+    option (google.api.http) = {
+      post: "/api/v1/client/create"
+      body: "*"
+
     };
-    rpc CreateTunnel(CreateTunnelRequest) returns (CreateTunnelResponse){
-        option (google.api.http) = {
-            post: "/api/v1/tunnel/create"
-            body: "*"
-        
-        }
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Create a new client"
+      description: "This API creates a new client and returns a secret key that can be used to authenticate the client."
     };
+  };
+  rpc CreateTunnel(CreateTunnelRequest) returns (CreateTunnelResponse){
+    option (google.api.http) = {
+      post: "/api/v1/tunnel/create"
+      body: "*"
+
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Create a new tunnel"
+      description: "This API creates a new tunnel and returns the tunnel ID."
+    };
+  };
 
 }
 
 message CreateClientRequest {
-    string group_id = 1;
+  string group_id = 1;
 }
 
 message CreateClientResponse {
-    string secret_key=1;
+  string secret_key = 1;
 }
 
 message CreateTunnelRequest {

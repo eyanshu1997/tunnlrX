@@ -5,31 +5,21 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/eyanshu1997/tunnlrx/common/log"
-	"github.com/eyanshu1997/tunnlrx/common/proto"
+	"github.com/eyanshu1997/tunnlrX/common/log"
+	"github.com/eyanshu1997/tunnlrX/common/proto"
+	"github.com/eyanshu1997/tunnlrX/server/mgmt"
 	"google.golang.org/grpc/peer"
 )
 
-type ClientState uint32
-
-const (
-	ClientStateUnknown ClientState = iota
-	ClientStateInactive
-	ClientStateActive
-	ClientStateInprogress
-)
-
-type ClientDetails struct {
-	Id    uint32
-	Name  string
-	Port  int
-	Ip    string
-	State ClientState
+func CreateClientMsg(mgmtClient mgmt.ClientDetails) *proto.Client {
+	return &proto.Client{
+		Id:          mgmtClient.Id,
+		Name:        mgmtClient.Name,
+		ClientState: proto.ClientState(mgmtClient.State),
+	}
 }
 
-var tempid uint32 = 0
-
-func (s *TunnelXServer) RegisterClient(ctx context.Context, req *proto.RegisterClientRequest) (*proto.RegisterClientResponse, error) {
+func (s *TunnlrxConfigServer) RegisterClient(ctx context.Context, req *proto.RegisterClientRequest) (*proto.RegisterClientResponse, error) {
 	log.Info("RegisterClient called with request: %v", req)
 	var clientIP string
 	var clientPort int
@@ -47,41 +37,33 @@ func (s *TunnelXServer) RegisterClient(ctx context.Context, req *proto.RegisterC
 		log.Info("Client connected from IP: %s, Port: %d\n", clientIP, clientPort)
 
 	}
-	// check if existing client exists using same port and ip
-	for _, client := range s.ClientDetails {
-		if client.Ip == clientIP && client.Port == clientPort {
-			log.Info("Client already exists: %v", client)
-			return &proto.RegisterClientResponse{
-				Id: client.Id,
-			}, nil
-		}
-	}
 	// create new client
-	newClient := ClientDetails{
-		Id:    tempid,
-		Name:  req.GetName(),
-		State: ClientStateActive,
-		Ip:    clientIP,
-		Port:  clientPort,
+	newClient := mgmt.ClientDetails{
+		Name: req.GetName(),
+		Ip:   clientIP,
+		Port: clientPort,
 	}
-
-	s.ClientDetails[newClient.Id] = newClient
-	tempid++
+	err := newClient.Create()
+	if err != nil {
+		log.Error("Error creating new client: %s", err)
+		return nil, err
+	}
 	log.Info("Registered new client: %v", newClient)
 	return &proto.RegisterClientResponse{
 		Id: newClient.Id,
 	}, nil
 }
 
-func (s *TunnelXServer) ListClients(ctx context.Context, req *proto.ListClientsRequest) (*proto.ListClientsResponse, error) {
+func (s *TunnlrxConfigServer) ListClients(ctx context.Context, req *proto.ListClientsRequest) (*proto.ListClientsResponse, error) {
 	log.Info("ListClients called with request: %v", req)
+	mgmtClients, err := mgmt.ListClients()
+	if err != nil {
+		log.Error("Error listing clients: %s", err)
+		return nil, err
+	}
 	var clients []*proto.Client
-	for _, client := range s.ClientDetails {
-		clients = append(clients, &proto.Client{
-			Id:          client.Id,
-			Name:        client.Name,
-			ClientState: proto.ClientState(client.State),
-		})
+	for _, client := range mgmtClients {
+		clients = append(clients, CreateClientMsg(client))
 	}
 	return &proto.ListClientsResponse{
 		Clients: clients,

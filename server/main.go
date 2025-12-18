@@ -2,12 +2,10 @@ package main
 
 import (
 	"flag"
-	"net/http"
 
-	"github.com/eyanshu1997/tunnlrx/common/log"
-	"github.com/eyanshu1997/tunnlrx/server/config"
-	"github.com/eyanshu1997/tunnlrx/server/grpcserver"
-	"github.com/eyanshu1997/tunnlrx/server/httpserver"
+	"github.com/eyanshu1997/tunnlrX/common/log"
+	"github.com/eyanshu1997/tunnlrX/server/config"
+	"github.com/eyanshu1997/tunnlrX/server/grpcserver"
 )
 
 var configPath string
@@ -27,14 +25,6 @@ func InitServer(config *config.ServerConfig) {
 		}
 		if err := grpcServer.Serve(lis); err != nil {
 			log.Fatalf("Failed to serve gRPC server: %v", err)
-		}
-	}()
-
-	go func() {
-		log.Info("Starting HTTP server on port %d", config.ApiPort)
-		httpServer := httpserver.NewHttpServer(config.ApiPort)
-		if err := httpServer.Start(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Failed to start HTTP server: %v", err)
 		}
 	}()
 }
