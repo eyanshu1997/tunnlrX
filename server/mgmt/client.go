@@ -105,5 +105,5 @@ func GetClientByName(name string) (ClientDetails, error) {
 	}
 	err := fmt.Sprintf("client name %s not found", name)
 	log.Error("Error: %s", err)
-	return ClientDetails{}, fmt.Errorf(err)
+	return ClientDetails{}, fmt.Errorf("error:%s", err)
 }
