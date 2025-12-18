@@ -4,6 +4,7 @@ import (
 	"flag"
 
 	"github.com/eyanshu1997/tunnlrX/common/log"
+	"github.com/eyanshu1997/tunnlrX/server/apiserver"
 	"github.com/eyanshu1997/tunnlrX/server/config"
 	"github.com/eyanshu1997/tunnlrX/server/grpcserver"
 )
@@ -25,6 +26,16 @@ func InitServer(config *config.ServerConfig) {
 		}
 		if err := grpcServer.Serve(lis); err != nil {
 			log.Fatalf("Failed to serve gRPC server: %v", err)
+		}
+	}()
+	go func() {
+		log.Info("Starting Api server on port %d", config.ApiPort)
+		apiserver, lis, err := apiserver.GetApiServerandListener(uint32(config.ApiPort))
+		if err != nil {
+			log.Fatalf("Failed to start API server: %v", err)
+		}
+		if err := apiserver.Serve(lis); err != nil {
+			log.Fatalf("Failed to serve API server: %v", err)
 		}
 	}()
 }

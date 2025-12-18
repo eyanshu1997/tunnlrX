@@ -19,23 +19,6 @@ func CreateTunnelMsg(mgmtTunnel mgmt.TunnelDetails, mgmtClient mgmt.ClientDetail
 
 }
 
-func (s *TunnlrxConfigServer) CreateTunnel(ctx context.Context, req *proto.CreateTunnelRequest) (*proto.CreateTunnelResponse, error) {
-	log.Info("CreateTunnel called with request: %v", req)
-	newTunnel := mgmt.TunnelDetails{
-		Name:     req.GetName(),
-		ClientId: req.GetClientId(),
-	}
-	err := newTunnel.Create()
-	if err != nil {
-		log.Error("Error creating new tunnel: %s", err)
-		return nil, err
-	}
-	log.Info("Registered new tunnel: %v", newTunnel)
-	return &proto.CreateTunnelResponse{
-		Id: newTunnel.Id,
-	}, nil
-}
-
 func (s *TunnlrxConfigServer) ListTunnels(ctx context.Context, req *proto.ListTunnelsRequest) (*proto.ListTunnelsResponse, error) {
 	log.Info("ListTunnels called with request: %v", req)
 	// check if optional client id is sent

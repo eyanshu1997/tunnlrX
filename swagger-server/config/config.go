@@ -15,40 +15,33 @@ type TunnelConfig struct {
 	Domain string `json:"domain"`
 }
 
-type ClientConfig struct {
+type SwaggerServerConfig struct {
 	ServerHost string `json:"host"`
 	ServerPort int    `json:"port"`
-	Name       string `json:"name"`
 	LogLevel   string `json:"log_level"`
-	SecretKey  string `json:"secret_key"`
+	UiPort     int    `json:"ui_port"`
 }
 
-func (s *ClientConfig) Validate() error {
+func (s *SwaggerServerConfig) Validate() error {
 	if s.ServerPort <= 0 || s.ServerPort > 65535 {
 		return fmt.Errorf("error:Invalid Server port")
 	}
 	if s.ServerHost == "" {
 		return fmt.Errorf("error:ServerHost cannot be empty")
 	}
-	if s.Name == "" {
-		return fmt.Errorf("error:Name cannot be empty")
-	}
 
 	if s.LogLevel == "" {
 		return fmt.Errorf("invalid log level")
 	}
 
-	if s.SecretKey == "" {
-		return fmt.Errorf("secret key cannot be empty")
-	}
 	return nil
 }
 
-func (s *ClientConfig) String() string {
-	return fmt.Sprintf("ClientConfig{ServerHost: %s, ServerPort: %d, Name: %s, SecretKey: %s, LogLevel: %s}", s.ServerHost, s.ServerPort, s.Name, s.SecretKey, s.LogLevel)
+func (s *SwaggerServerConfig) String() string {
+	return fmt.Sprintf("ServerHost: %s, ServerPort: %d, LogLevel: %s", s.ServerHost, s.ServerPort, s.LogLevel)
 }
 
-func LoadConfig(filePath string) (*ClientConfig, error) {
+func LoadConfig(filePath string) (*SwaggerServerConfig, error) {
 
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -57,7 +50,7 @@ func LoadConfig(filePath string) (*ClientConfig, error) {
 	defer file.Close()
 
 	decoder := json.NewDecoder(file)
-	config := &ClientConfig{}
+	config := &SwaggerServerConfig{}
 	err = decoder.Decode(config)
 	if err != nil {
 		return nil, err

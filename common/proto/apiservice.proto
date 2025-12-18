@@ -12,12 +12,12 @@ option go_package = "github.com/eyanshu1997/tunnlrX/common/proto;proto";
 
 // These annotations are used when generating the OpenAPI file.
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
-  info: {version: "1.0"};
+  info         : {version: "1.0"};
   external_docs: {
-    url: "https://github.com/eyanshu1997/tunnlrX";
-    description: "TunnlrX API Documentation";
+    url          : "https://github.com/eyanshu1997/tunnlrX";
+    description  : "TunnlrX API Documentation";
   }
-  schemes: HTTPS;
+  schemes      : HTTPS;
 };
 
 // TunnlrxApiServeice is the main service that is used to configure the server
@@ -29,7 +29,7 @@ service TunnlrxApiServeice{
 
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Create a new client"
+      summary    : "Create a new client"
       description: "This API creates a new client and returns a secret key that can be used to authenticate the client."
     };
   };
@@ -40,7 +40,7 @@ service TunnlrxApiServeice{
 
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Create a new tunnel"
+      summary    : "Create a new tunnel"
       description: "This API creates a new tunnel and returns the tunnel ID."
     };
   };
@@ -49,16 +49,19 @@ service TunnlrxApiServeice{
 
 message CreateClientRequest {
   string group_id = 1;
+  string name     = 2;
 }
 
 message CreateClientResponse {
   string secret_key = 1;
+  uint32 id         = 2;
+  string name       = 3;
 }
 
 message CreateTunnelRequest {
-  string name = 1;
-  int32 port = 2;
-  string domain = 3;
+  string name      = 1;
+  int32  port      = 2;
+  string domain    = 3;
   uint32 client_id = 4;
 }
 

@@ -15,9 +15,10 @@ type grpcClient struct {
 	client proto.ConfigServiceClient
 	Name   string
 	id     uint32
+	Secret string
 }
 
-func NewGrpcClient(host string, port int, name string) (*grpcClient, error) {
+func NewGrpcClient(host string, port int, name string, secret string) (*grpcClient, error) {
 	addr := fmt.Sprintf("%s:%d", host, port)
 	conn, err := grpc.Dial(
 		addr,

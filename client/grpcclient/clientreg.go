@@ -10,7 +10,8 @@ import (
 
 func (g *grpcClient) RegisterClient(ctx context.Context) error {
 	resp, err := g.client.RegisterClient(ctx, &proto.RegisterClientRequest{
-		Name: g.Name,
+		Name:      g.Name,
+		SecretKey: g.Secret,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to register client: %v", err)

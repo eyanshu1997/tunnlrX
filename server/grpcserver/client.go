@@ -37,20 +37,19 @@ func (s *TunnlrxConfigServer) RegisterClient(ctx context.Context, req *proto.Reg
 		log.Info("Client connected from IP: %s, Port: %d\n", clientIP, clientPort)
 
 	}
-	// create new client
-	newClient := mgmt.ClientDetails{
-		Name: req.GetName(),
-		Ip:   clientIP,
-		Port: clientPort,
+	client, err := mgmt.GetClientByName(req.GetName())
+	if err != nil {
+		log.Error("Error getting client: %s", err)
+		return nil, err
 	}
-	err := newClient.Create()
+	err = client.Register(clientIP, clientPort, req.GetSecretKey())
 	if err != nil {
 		log.Error("Error creating new client: %s", err)
 		return nil, err
 	}
-	log.Info("Registered new client: %v", newClient)
+	log.Info("Registered new client: %v", client)
 	return &proto.RegisterClientResponse{
-		Id: newClient.Id,
+		Id: client.Id,
 	}, nil
 }
 

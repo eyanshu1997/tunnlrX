@@ -2,16 +2,6 @@
     "host": "localhost",
     "port": 9090,
     "name": "SampleClient1",
-    "tunnels": [
-        {
-            "port": 8080,
-            "domain": "firstDomain8080"
-        },
-        {
-            "port": 8081,
-            "domain": "secondDomain8081"
-        }
-    ],
     "log_level": "info",
-    "serviceName": "tunnlrxClient"
+    "secret_key": "my_secret_key_123"
 }

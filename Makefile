@@ -1,6 +1,7 @@
 # Project-level Makefile for TunnlrX
 BUF_VERSION:=v1.17.0
 SWAGGER_UI_VERSION:=v4.15.5
+.PHONY: all generate proto tidy server client swagger_server clean deps swagger-ui
 
 
 deps:
@@ -11,7 +12,7 @@ deps:
 
 
 
-all:  generate server client
+all:  generate server client swagger_server
 
 generate: tidy proto swagger-ui
 
@@ -30,8 +31,8 @@ server:
 client: 
 	cd client && go build -o ../build/tunnlrx-client
 
-swagger:
-	cd swagger-server && go build -o ../build/tunnelrx-swagger-server
+swagger_server:
+	cd swagger-server && go build -o ../build/tunnlrx-swagger-server
 
 clean:
 	rm -f common/proto/*.pb.go
@@ -50,8 +51,8 @@ CLIENT_NO ?= 1
 run_client:
 	nohup ./build/tunnlrx-client -config=configs/tunnlrx-client.json > logs/tunnlrx-client$(CLIENT_NO).log 2>&1 &
 
-run_swagger:
-	nohup ./build/tunnelrx-swagger-server > logs/swagger-server.log 2>&1 &
+run_swagger_server:
+	nohup ./build/tunnlrx-swagger-server -config=configs/tunnlrx-swagger-server.json > logs/tunnlrx-swagger-server.log 2>&1 &
 
 stop_all:
 	pkill tunnlrx-server || true

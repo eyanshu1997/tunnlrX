@@ -2,21 +2,29 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"io/fs"
-	"io/ioutil"
 	"mime"
 	"net/http"
-	"os"
 	"strings"
 
+	"github.com/eyanshu1997/tunnlrX/common/log"
 	"github.com/eyanshu1997/tunnlrX/common/proto"
+	"github.com/eyanshu1997/tunnlrX/swagger-server/config"
 	"github.com/eyanshu1997/tunnlrX/third_party"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/grpclog"
 )
+
+var configPath string
+
+func init() {
+	flag.StringVar(&configPath, "config", "configs/tunnlrx-client.json", "Path to configuration file")
+	flag.Parse()
+}
 
 // getOpenAPIHandler serves an OpenAPI UI.
 // Adapted from https://github.com/philips/grpc-gateway-example/blob/a269bcb5931ca92be0ceae6130ac27ae89582ecc/cmd/serve.go#L63
@@ -31,10 +39,7 @@ func getOpenAPIHandler() http.Handler {
 }
 
 // Run runs the gRPC-Gateway, dialling the provided address.
-func Run(dialAddr string) error {
-	// Adds gRPC internal logs. This is quite verbose, so adjust as desired!
-	log := grpclog.NewLoggerV2(os.Stdout, ioutil.Discard, ioutil.Discard)
-	grpclog.SetLoggerV2(log)
+func Run(dialAddr string, port int) error {
 
 	conn, err := grpc.Dial(
 		dialAddr,
@@ -54,11 +59,7 @@ func Run(dialAddr string) error {
 
 	oa := getOpenAPIHandler()
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "11000"
-	}
-	gatewayAddr := "0.0.0.0:" + port
+	gatewayAddr := "0.0.0.0:" + fmt.Sprintf("%d", port)
 	gwServer := &http.Server{
 		Addr: gatewayAddr,
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -69,18 +70,20 @@ func Run(dialAddr string) error {
 			oa.ServeHTTP(w, r)
 		}),
 	}
-	// Empty parameters mean use the TLS Config specified with the server.
-	if strings.ToLower(os.Getenv("SERVE_HTTP")) == "true" {
-		log.Info("Serving gRPC-Gateway and OpenAPI Documentation on http://", gatewayAddr)
-		return fmt.Errorf("serving gRPC-Gateway server: %w", gwServer.ListenAndServe())
-	}
 
-	log.Info("Serving gRPC-Gateway and OpenAPI Documentation on https://", gatewayAddr)
-	return fmt.Errorf("serving gRPC-Gateway server: %w", gwServer.ListenAndServeTLS("", ""))
+	log.Info("Serving gRPC-Gateway and OpenAPI Documentation on http://%s", gatewayAddr)
+	return fmt.Errorf("serving gRPC-Gateway server: %w", gwServer.ListenAndServe())
+
 }
 
 func main() {
-	if err := Run("dns:///" + "0.0.0.0:10000"); err != nil {
+	swaggerServerConfig, err := config.LoadConfig(configPath)
+	if err != nil {
+		fmt.Printf("Failed to load client config: %v\n", err)
+		return
+	}
+	log.InitLogger(swaggerServerConfig.LogLevel)
+	if err := Run("dns:///"+swaggerServerConfig.ServerHost+":"+fmt.Sprintf("%d", swaggerServerConfig.ServerPort), swaggerServerConfig.UiPort); err != nil {
 		grpclog.Fatal(err)
 	}
 }

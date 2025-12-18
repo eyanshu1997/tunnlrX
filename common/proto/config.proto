@@ -17,8 +17,8 @@ service ConfigService {
 }
 
 message RegisterClientRequest {
-  string name = 1;
-  string secret_key = 2;
+  string secret_key = 1;
+  string name = 2;
 }
 
 message RegisterClientResponse {

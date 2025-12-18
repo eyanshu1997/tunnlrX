@@ -30,7 +30,7 @@ func main() {
 	log.InitLogger(clientConfig.LogLevel)
 
 	// Initialize client with the loaded configuration
-	client, err := grpcclient.NewGrpcClient(clientConfig.ServerHost, clientConfig.ServerPort, clientConfig.Name)
+	client, err := grpcclient.NewGrpcClient(clientConfig.ServerHost, clientConfig.ServerPort, clientConfig.Name, clientConfig.SecretKey)
 	if err != nil {
 		fmt.Printf("Failed to initialize client: %v\n", err)
 		return
@@ -47,13 +47,6 @@ func main() {
 	if err != nil {
 		fmt.Printf("Failed to register client: %v\n", err)
 		return
-	}
-	for _, tunnel := range clientConfig.TunnelConfig {
-		err = client.RegisterTunnel(ctx, int32(tunnel.Port), tunnel.Domain)
-		if err != nil {
-			fmt.Printf("Failed to register tunnel: %v\n", err)
-			return
-		}
 	}
 
 	ticker := time.NewTicker(30 * time.Second)
