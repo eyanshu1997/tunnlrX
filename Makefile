@@ -57,12 +57,12 @@ run_swagger_server: stop_swagger_server
 	nohup ./build/tunnlrx-swagger-server -config=configs/tunnlrx-swagger-server.json > logs/tunnlrx-swagger-server.log 2>&1 &
 
 stop_server:
-	pkill -f tunnlrx-server || true
+	pkill -f '^\./build/tunnlrx-server' || true
 	
 stop_client:
-	pkill -f tunnlrx-client || true
+	pkill -f '^\./build/tunnlrx-client' || true
 	
 stop_swagger_server:
-	pkill -f tunnlrx-swagger-server || true
+	pkill -f '^\./build/tunnlrx-swagger-server' || true
 
 stop_all: stop_server stop_client stop_swagger_server

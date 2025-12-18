@@ -109,7 +109,7 @@ func main() {
 		return
 	}
 	log.InitLogger(swaggerServerConfig.LogLevel)
-	if err := Run("dns:///"+swaggerServerConfig.ServerHost+":"+fmt.Sprintf("%d", swaggerServerConfig.ServerPort), swaggerServerConfig.UiPort); err != nil {
+	if err := Run("https://"+swaggerServerConfig.ServerHost+":"+fmt.Sprintf("%d", swaggerServerConfig.ServerPort), swaggerServerConfig.UiPort); err != nil {
 		grpclog.Fatal(err)
 	}
 }
