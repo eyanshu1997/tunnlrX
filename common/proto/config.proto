@@ -10,8 +10,6 @@ option go_package = "github.com/eyanshu1997/tunnlrX/common/proto;proto";
 service ConfigService {
   // RegisterClient is used to register a new client to the server
   rpc RegisterClient (RegisterClientRequest) returns (RegisterClientResponse);
-  // ListClients is used to list all the clients registered to the server
-  rpc ListClients (ListClientsRequest) returns (ListClientsResponse);
   // ListTunnels is used to list all the tunnels registered to the server
   rpc ListTunnels (ListTunnelsRequest) returns (ListTunnelsResponse);
 }
@@ -23,12 +21,6 @@ message RegisterClientRequest {
 
 message RegisterClientResponse {
   uint32 id = 1;
-}
-
-message ListClientsRequest {}
-
-message ListClientsResponse {
-  repeated Client clients = 1;
 }
 
 message ListTunnelsRequest {

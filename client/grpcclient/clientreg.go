@@ -20,12 +20,3 @@ func (g *grpcClient) RegisterClient(ctx context.Context) error {
 	log.Info("RegisterClient got id: %d", g.id)
 	return nil
 }
-
-func (g *grpcClient) ListClients(ctx context.Context) error {
-	resp, err := g.client.ListClients(ctx, &proto.ListClientsRequest{})
-	if err != nil {
-		return fmt.Errorf("failed to list clients: %v", err)
-	}
-	log.Info("ListClients response: %v", resp)
-	return nil
-}

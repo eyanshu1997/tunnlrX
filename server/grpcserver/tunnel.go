@@ -7,17 +7,8 @@ import (
 	"github.com/eyanshu1997/tunnlrX/common/log"
 	"github.com/eyanshu1997/tunnlrX/common/proto"
 	"github.com/eyanshu1997/tunnlrX/server/mgmt"
+	"github.com/eyanshu1997/tunnlrX/server/mgmttranslate"
 )
-
-func CreateTunnelMsg(mgmtTunnel mgmt.TunnelDetails, mgmtClient mgmt.ClientDetails) *proto.Tunnel {
-	return &proto.Tunnel{
-		Id:          mgmtTunnel.Id,
-		Name:        mgmtTunnel.Name,
-		TunnelState: proto.TunnelState(mgmtTunnel.State),
-		Client:      CreateClientMsg(mgmtClient),
-	}
-
-}
 
 func (s *TunnlrxConfigServer) ListTunnels(ctx context.Context, req *proto.ListTunnelsRequest) (*proto.ListTunnelsResponse, error) {
 	log.Info("ListTunnels called with request: %v", req)
@@ -35,7 +26,7 @@ func (s *TunnlrxConfigServer) ListTunnels(ctx context.Context, req *proto.ListTu
 			log.Error("Error: %s", err)
 			return nil, err
 		}
-		tunnels = append(tunnels, CreateTunnelMsg(tunnel, mgmtClient))
+		tunnels = append(tunnels, mgmttranslate.CreateTunnelMsg(tunnel, mgmtClient))
 	}
 	return &proto.ListTunnelsResponse{
 		Tunnels: tunnels,

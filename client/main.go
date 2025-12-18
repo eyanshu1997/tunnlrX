@@ -52,9 +52,9 @@ func main() {
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 	for range ticker.C {
-		err := client.ListClients(ctx)
+		err := client.ListTunnels(ctx)
 		if err != nil {
-			fmt.Printf("Failed to list clients: %v\n", err)
+			fmt.Printf("Failed to list tunnels: %v\n", err)
 		}
 	}
 

@@ -11,14 +11,6 @@ import (
 	"google.golang.org/grpc/peer"
 )
 
-func CreateClientMsg(mgmtClient mgmt.ClientDetails) *proto.Client {
-	return &proto.Client{
-		Id:          mgmtClient.Id,
-		Name:        mgmtClient.Name,
-		ClientState: proto.ClientState(mgmtClient.State),
-	}
-}
-
 func (s *TunnlrxConfigServer) RegisterClient(ctx context.Context, req *proto.RegisterClientRequest) (*proto.RegisterClientResponse, error) {
 	log.Info("RegisterClient called with request: %v", req)
 	var clientIP string
@@ -50,21 +42,5 @@ func (s *TunnlrxConfigServer) RegisterClient(ctx context.Context, req *proto.Reg
 	log.Info("Registered new client: %v", client)
 	return &proto.RegisterClientResponse{
 		Id: client.Id,
-	}, nil
-}
-
-func (s *TunnlrxConfigServer) ListClients(ctx context.Context, req *proto.ListClientsRequest) (*proto.ListClientsResponse, error) {
-	log.Info("ListClients called with request: %v", req)
-	mgmtClients, err := mgmt.ListClients()
-	if err != nil {
-		log.Error("Error listing clients: %s", err)
-		return nil, err
-	}
-	var clients []*proto.Client
-	for _, client := range mgmtClients {
-		clients = append(clients, CreateClientMsg(client))
-	}
-	return &proto.ListClientsResponse{
-		Clients: clients,
 	}, nil
 }

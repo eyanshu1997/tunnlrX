@@ -21,14 +21,19 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	TunnlrxApiServeice_CreateClient_FullMethodName = "/proto.TunnlrxApiServeice/CreateClient"
 	TunnlrxApiServeice_CreateTunnel_FullMethodName = "/proto.TunnlrxApiServeice/CreateTunnel"
+	TunnlrxApiServeice_ListClients_FullMethodName  = "/proto.TunnlrxApiServeice/ListClients"
 )
 
 // TunnlrxApiServeiceClient is the client API for TunnlrxApiServeice service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TunnlrxApiServeiceClient interface {
+	// CreateClient is used to create a new client on the server
 	CreateClient(ctx context.Context, in *CreateClientRequest, opts ...grpc.CallOption) (*CreateClientResponse, error)
+	// CreateTunnel is used to create a new tunnel on the server
 	CreateTunnel(ctx context.Context, in *CreateTunnelRequest, opts ...grpc.CallOption) (*CreateTunnelResponse, error)
+	// ListClients is used to list all the clients registered to the server
+	ListClients(ctx context.Context, in *ListClientsRequest, opts ...grpc.CallOption) (*ListClientsResponse, error)
 }
 
 type tunnlrxApiServeiceClient struct {
@@ -57,12 +62,25 @@ func (c *tunnlrxApiServeiceClient) CreateTunnel(ctx context.Context, in *CreateT
 	return out, nil
 }
 
+func (c *tunnlrxApiServeiceClient) ListClients(ctx context.Context, in *ListClientsRequest, opts ...grpc.CallOption) (*ListClientsResponse, error) {
+	out := new(ListClientsResponse)
+	err := c.cc.Invoke(ctx, TunnlrxApiServeice_ListClients_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TunnlrxApiServeiceServer is the server API for TunnlrxApiServeice service.
 // All implementations should embed UnimplementedTunnlrxApiServeiceServer
 // for forward compatibility
 type TunnlrxApiServeiceServer interface {
+	// CreateClient is used to create a new client on the server
 	CreateClient(context.Context, *CreateClientRequest) (*CreateClientResponse, error)
+	// CreateTunnel is used to create a new tunnel on the server
 	CreateTunnel(context.Context, *CreateTunnelRequest) (*CreateTunnelResponse, error)
+	// ListClients is used to list all the clients registered to the server
+	ListClients(context.Context, *ListClientsRequest) (*ListClientsResponse, error)
 }
 
 // UnimplementedTunnlrxApiServeiceServer should be embedded to have forward compatible implementations.
@@ -74,6 +92,9 @@ func (UnimplementedTunnlrxApiServeiceServer) CreateClient(context.Context, *Crea
 }
 func (UnimplementedTunnlrxApiServeiceServer) CreateTunnel(context.Context, *CreateTunnelRequest) (*CreateTunnelResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTunnel not implemented")
+}
+func (UnimplementedTunnlrxApiServeiceServer) ListClients(context.Context, *ListClientsRequest) (*ListClientsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListClients not implemented")
 }
 
 // UnsafeTunnlrxApiServeiceServer may be embedded to opt out of forward compatibility for this service.
@@ -123,6 +144,24 @@ func _TunnlrxApiServeice_CreateTunnel_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TunnlrxApiServeice_ListClients_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListClientsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TunnlrxApiServeiceServer).ListClients(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TunnlrxApiServeice_ListClients_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TunnlrxApiServeiceServer).ListClients(ctx, req.(*ListClientsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TunnlrxApiServeice_ServiceDesc is the grpc.ServiceDesc for TunnlrxApiServeice service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -137,6 +176,10 @@ var TunnlrxApiServeice_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateTunnel",
 			Handler:    _TunnlrxApiServeice_CreateTunnel_Handler,
+		},
+		{
+			MethodName: "ListClients",
+			Handler:    _TunnlrxApiServeice_ListClients_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

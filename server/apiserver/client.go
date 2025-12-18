@@ -7,6 +7,7 @@ import (
 	"github.com/eyanshu1997/tunnlrX/common/log"
 	"github.com/eyanshu1997/tunnlrX/common/proto"
 	"github.com/eyanshu1997/tunnlrX/server/mgmt"
+	"github.com/eyanshu1997/tunnlrX/server/mgmttranslate"
 )
 
 func (s *TunnlrXApiServer) CreateClient(ctx context.Context, req *proto.CreateClientRequest) (*proto.CreateClientResponse, error) {
@@ -23,20 +24,20 @@ func (s *TunnlrXApiServer) CreateClient(ctx context.Context, req *proto.CreateCl
 		SecretKey: client.Secret,
 	}, nil
 }
-func (s *TunnlrXApiServer) CreateTunnel(ctx context.Context, req *proto.CreateTunnelRequest) (*proto.CreateTunnelResponse, error) {
 
-	log.Info("CreateTunnel called with request: %v", req)
-	newTunnel := mgmt.TunnelDetails{
-		Name:     req.GetName(),
-		ClientId: req.GetClientId(),
-	}
-	err := newTunnel.Create()
+func (s *TunnlrXApiServer) ListClients(ctx context.Context, req *proto.ListClientsRequest) (*proto.ListClientsResponse, error) {
+
+	log.Info("ListClients called with request: %v", req)
+	mgmtClients, err := mgmt.ListClients()
 	if err != nil {
-		log.Error("Error creating new tunnel: %s", err)
+		log.Error("Error listing clients: %s", err)
 		return nil, err
 	}
-	log.Info("Registered new tunnel: %v", newTunnel)
-	return &proto.CreateTunnelResponse{
-		Id: newTunnel.Id,
+	var clients []*proto.Client
+	for _, client := range mgmtClients {
+		clients = append(clients, mgmttranslate.CreateClientMsg(client))
+	}
+	return &proto.ListClientsResponse{
+		Clients: clients,
 	}, nil
 }

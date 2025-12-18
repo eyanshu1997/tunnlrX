@@ -9,7 +9,7 @@ import (
 
 // Add fields as necessary, e.g., database connections, configurations, etc.
 var (
-	clientDetails map[uint32]ClientDetails // Example field to hold tunnel states
+	clientDetails map[uint32]ClientDetails = make(map[uint32]ClientDetails) // Example field to hold tunnel states
 	tempid        uint32                   = 0
 )
 

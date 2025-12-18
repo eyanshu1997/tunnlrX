@@ -22,6 +22,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 // TunnlrxApiServeice is the main service that is used to configure the server
 service TunnlrxApiServeice{
+  // CreateClient is used to create a new client on the server
   rpc CreateClient(CreateClientRequest) returns (CreateClientResponse){
     option (google.api.http) = {
       post: "/api/v1/client/create"
@@ -33,6 +34,7 @@ service TunnlrxApiServeice{
       description: "This API creates a new client and returns a secret key that can be used to authenticate the client."
     };
   };
+  // CreateTunnel is used to create a new tunnel on the server
   rpc CreateTunnel(CreateTunnelRequest) returns (CreateTunnelResponse){
     option (google.api.http) = {
       post: "/api/v1/tunnel/create"
@@ -44,7 +46,17 @@ service TunnlrxApiServeice{
       description: "This API creates a new tunnel and returns the tunnel ID."
     };
   };
-
+  // ListClients is used to list all the clients registered to the server
+  rpc ListClients (ListClientsRequest) returns (ListClientsResponse){
+    option (google.api.http) = {
+      get: "/api/v1/clients"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary    : "List all clients"
+      description: "This API lists all the clients registered to the server."
+    };
+  };
+  
 }
 
 message CreateClientRequest {
@@ -57,6 +69,14 @@ message CreateClientResponse {
   uint32 id         = 2;
   string name       = 3;
 }
+
+
+message ListClientsRequest {}
+
+message ListClientsResponse {
+  repeated Client clients = 1;
+}
+
 
 message CreateTunnelRequest {
   string name      = 1;
