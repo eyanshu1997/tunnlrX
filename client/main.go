@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
 	"time"
 
 	"github.com/eyanshu1997/tunnlrX/client/config"
@@ -23,8 +22,7 @@ func main() {
 	// Load client configuration
 	clientConfig, err := config.LoadConfig(configPath)
 	if err != nil {
-		fmt.Printf("Failed to load client config: %v\n", err)
-		return
+		log.Fatalf("Failed to load client config: %v\n", err)
 	}
 
 	log.InitLogger(clientConfig.LogLevel)
@@ -32,8 +30,7 @@ func main() {
 	// Initialize client with the loaded configuration
 	client, err := grpcclient.NewGrpcClient(clientConfig.ServerHost, clientConfig.ServerPort, clientConfig.Name, clientConfig.SecretKey)
 	if err != nil {
-		fmt.Printf("Failed to initialize client: %v\n", err)
-		return
+		log.Fatalf("Failed to initialize client: %v\n", err)
 	}
 	defer func() {
 		_ = client.Close()
@@ -45,8 +42,7 @@ func main() {
 	ctx := context.Background()
 	err = client.RegisterClient(ctx)
 	if err != nil {
-		fmt.Printf("Failed to register client: %v\n", err)
-		return
+		log.Fatalf("Failed to register client: %v\n", err)
 	}
 
 	ticker := time.NewTicker(30 * time.Second)
@@ -54,7 +50,7 @@ func main() {
 	for range ticker.C {
 		err := client.ListTunnels(ctx)
 		if err != nil {
-			fmt.Printf("Failed to list tunnels: %v\n", err)
+			log.Fatalf("Failed to list tunnels: %v\n", err)
 		}
 	}
 

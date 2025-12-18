@@ -1,7 +1,7 @@
 # Project-level Makefile for TunnlrX
 BUF_VERSION:=v1.17.0
 SWAGGER_UI_VERSION:=v4.15.5
-.PHONY: all generate proto tidy server client swagger_server clean deps swagger-ui
+.PHONY: all generate proto tidy server client swagger_server clean deps swagger-ui check-logging
 
 
 deps:
@@ -12,7 +12,11 @@ deps:
 
 
 
-all:  generate server client swagger_server
+
+check-logging:
+	@bash ./scripts/check-log-usage.sh
+
+all: check-logging generate server client swagger_server
 
 generate: tidy proto swagger-ui
 
