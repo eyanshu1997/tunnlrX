@@ -35,7 +35,30 @@ func getOpenAPIHandler() http.Handler {
 	if err != nil {
 		panic("couldn't create sub filesystem: " + err.Error())
 	}
-	return http.FileServer(http.FS(subFS))
+	fsHandler := http.FileServer(http.FS(subFS))
+
+	// Wrap the file server to log requests and status codes for easier debugging
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// ResponseWriter wrapper to capture status code
+		rw := &statusResponseWriter{ResponseWriter: w, status: 200}
+		fsHandler.ServeHTTP(rw, r)
+		if rw.status >= 400 {
+			log.Error("Static UI error: %s %s returned %d", r.Method, r.URL.Path, rw.status)
+		} else {
+			log.Debug("Static UI: %s %s returned %d", r.Method, r.URL.Path, rw.status)
+		}
+	})
+}
+
+// statusResponseWriter wraps http.ResponseWriter to capture the status code
+type statusResponseWriter struct {
+	http.ResponseWriter
+	status int
+}
+
+func (s *statusResponseWriter) WriteHeader(code int) {
+	s.status = code
+	s.ResponseWriter.WriteHeader(code)
 }
 
 // Run runs the gRPC-Gateway, dialling the provided address.
@@ -63,7 +86,10 @@ func Run(dialAddr string, port int) error {
 	gwServer := &http.Server{
 		Addr: gatewayAddr,
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if strings.HasPrefix(r.URL.Path, "/api") {
+			// Only forward requests whose path is exactly "/api" or starts with "/api/"
+			// This prevents paths like "/apiservice.swagger.json" from being
+			// accidentally handled by the gRPC gateway.
+			if r.URL.Path == "/api" || strings.HasPrefix(r.URL.Path, "/api/") {
 				gwmux.ServeHTTP(w, r)
 				return
 			}

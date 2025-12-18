@@ -42,19 +42,27 @@ clean:
 
 
 # we need to run as daemon
-run_server:
-	pkill tunnlrx-server || true
+run_server: stop_server
+	@rm -rf logs/tunnlrx-server.log
 	nohup ./build/tunnlrx-server -config=configs/tunnlrx-server.json > logs/tunnlrx-server.log 2>&1 &
 
 CLIENT_NO ?= 1
 
 run_client:
+	@rm -rf logs/tunnlrx-client$(CLIENT_NO).log
 	nohup ./build/tunnlrx-client -config=configs/tunnlrx-client.json > logs/tunnlrx-client$(CLIENT_NO).log 2>&1 &
 
-run_swagger_server:
+run_swagger_server: stop_swagger_server
+	@rm -rf logs/tunnlrx-swagger-server.log
 	nohup ./build/tunnlrx-swagger-server -config=configs/tunnlrx-swagger-server.json > logs/tunnlrx-swagger-server.log 2>&1 &
 
-stop_all:
-	pkill tunnlrx-server || true
-	pkill tunnlrx-client || true
-	pkill tunnelrx-swagger-server || true
+stop_server:
+	pkill -f tunnlrx-server || true
+	
+stop_client:
+	pkill -f tunnlrx-client || true
+	
+stop_swagger_server:
+	pkill -f tunnlrx-swagger-server || true
+
+stop_all: stop_server stop_client stop_swagger_server
